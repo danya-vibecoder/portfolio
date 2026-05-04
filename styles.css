@@ -18,9 +18,6 @@
   font-display: swap;
 }
 
-/* Light, Bold, Thin не загружены — браузер будет синтезировать веса при нужде.
-   Положите Light/Bold/Thin .otf в assets/fonts и добавьте сюда @font-face блоки. */
-
 @font-face {
   font-family: "Botch";
   src: url("assets/fonts/Botch.otf") format("opentype");
@@ -35,37 +32,46 @@
    ============================================= */
 
 :root {
-  /* Colors — page */
+  /* Colors */
   --bg: #000000;
   --text: #ffffff;
   --text-label: rgba(255, 255, 255, 0.4);
   --border: rgba(255, 255, 255, 0.1);
   --border-tag: rgba(255, 255, 255, 0.15);
-
-  /* Colors — sidebar capsule (inverted) */
   --menu-bg: #ffffff;
   --menu-text-active: #000000;
   --menu-text-inactive: rgba(0, 0, 0, 0.4);
 
   /* Layout */
   --sidebar-w: 277px;
+  --content-max: 1024px;
+  --pad-x: 32px;
+  --header-h: 68px;
 
-  /* Scale factor для типографики и отступов внутри контента.
-     На ≥1440 = 1 (базовые значения из Figma).
-     На 1024–1440 переопределяется ниже. */
-  --s: 1;
+  /* Gaps & paddings */
+  --gap-section: 100px;
+  --gap-case-content: 98px;
+  --gap-tag: 8px;
+  --gap-row: 8px;
+  --gap-col: 36px;
+  --pad-case: 60px;
 
-  /* Typography */
+  /* Typography (constant on desktop ≥1024) */
+  --fs-hero: 36px;   --lh-hero: 40px;   --tr-hero: -0.72px;
+  --fs-title: 36px;  --lh-title: 40px;  --tr-title: -0.72px;
+  --fs-value: 32px;  --lh-value: 36px;  --tr-value: -0.64px;
+  --fs-label: 16px;  --lh-label: 22px;  --tr-label: -0.16px;
+  --fs-tag: 16px;    --lh-tag: 20px;    --tr-tag: -0.16px;
+  --fs-desc: 16px;   --lh-desc: 22px;   --tr-desc: -0.16px;
+  --fs-cta: 24px;    --lh-cta: 28px;    --tr-cta: -0.48px;
+  --fs-link: 16px;   --lh-link: 22px;   --tr-link: -0.14px;
+
+  --radius-hero: 24px;
+  --radius-case: 20px;
+
+  /* Fonts */
   --ff-sans: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   --ff-display: "Botch", "Helvetica Neue", sans-serif;
-}
-
-/* 1024–1440: сайдбар скейлится, --s обновляется для типографики */
-@media (min-width: 1024px) and (max-width: 1439.98px) {
-  :root {
-    --sidebar-w: clamp(220px, 19.24vw, 277px);
-    --s: calc(100vw / 1440);
-  }
 }
 
 
@@ -75,10 +81,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html, body {
-  margin: 0;
-  padding: 0;
-}
+html, body { margin: 0; padding: 0; }
 
 html { background: var(--bg); }
 
@@ -102,7 +105,7 @@ button { font: inherit; }
 
 
 /* =============================================
-   SIDEBAR
+   SIDEBAR (visible at ≥1200)
    ============================================= */
 
 .sidebar {
@@ -115,29 +118,27 @@ button { font: inherit; }
   z-index: 10;
 }
 
-/* Логотип — позиция фиксированная, шрифт скейлится */
 .sidebar__logo {
   position: absolute;
   top: 40px;
   left: 20px;
   font-family: var(--ff-display);
-  font-size: calc(44px * var(--s));
-  line-height: calc(44px * var(--s));
-  letter-spacing: calc(-1.76px * var(--s));
+  font-size: 44px;
+  line-height: 44px;
+  letter-spacing: -1.76px;
   color: var(--text);
   white-space: pre;
 }
 
-/* Белая капсула — позиция фиксированная, визуальные свойства жёсткие */
 .sidebar__menu {
   position: absolute;
   bottom: 40px;
   left: 20px;
-  width: calc(var(--sidebar-w) - 40px); /* 20px отступ с каждой стороны */
-  height: clamp(300px, 26.39vw, 380px);
-  background: #ffffff;
+  width: calc(var(--sidebar-w) - 40px);
+  height: 380px;
+  background: var(--menu-bg);
   border-radius: 28px;
-  padding: calc(20px * var(--s));
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -145,11 +146,10 @@ button { font: inherit; }
   overflow: hidden;
 }
 
-/* Навигация внутри капсулы */
 .sidebar__nav {
   display: flex;
   flex-direction: column;
-  gap: calc(8px * var(--s));
+  gap: 8px;
 }
 
 .sidebar__nav-item {
@@ -158,34 +158,86 @@ button { font: inherit; }
   justify-content: space-between;
   font-family: var(--ff-sans);
   font-weight: 500;
-  font-size: calc(28px * var(--s));
-  line-height: calc(32px * var(--s));
-  letter-spacing: calc(-0.56px * var(--s));
+  font-size: 28px;
+  line-height: 32px;
+  letter-spacing: -0.56px;
   color: var(--menu-text-inactive);
   white-space: nowrap;
   transition: color 0.15s ease;
 }
 .sidebar__nav-item:hover { color: var(--menu-text-active); }
-
 .sidebar__nav-item--active { color: var(--menu-text-active); }
 
-/* Звёздочка — видна только у активного пункта */
 .sidebar__asterisk {
   display: none;
-  width: calc(28px * var(--s));
-  height: calc(26.63px * var(--s));
+  width: 28px;
+  height: 26.63px;
   flex-shrink: 0;
 }
 .sidebar__nav-item--active .sidebar__asterisk { display: block; }
 
-/* Часы в нижней части капсулы */
 .sidebar__clock {
   font-family: var(--ff-sans);
   font-weight: 400;
-  font-size: calc(16px * var(--s));
-  line-height: calc(20px * var(--s));
-  letter-spacing: calc(-0.32px * var(--s));
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.32px;
   color: var(--menu-text-active);
+}
+
+
+/* =============================================
+   MOBILE HEADER (visible at <1200)
+   ============================================= */
+
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-h);
+  background: var(--bg);
+  z-index: 20;
+}
+
+.mobile-header__logo {
+  position: absolute;
+  top: 20px;
+  left: 32px;
+  font-family: var(--ff-display);
+  font-size: 32px;
+  line-height: 36px;
+  letter-spacing: -1.28px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.mobile-header__menu {
+  position: absolute;
+  top: 16px;
+  right: 32px;
+  width: 60px;
+  height: 36px;
+  border-radius: 100px;
+  background: #ffffff;
+  backdrop-filter: blur(7.5px);
+  -webkit-backdrop-filter: blur(7.5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s ease;
+}
+.mobile-header__menu:hover { opacity: 0.85; }
+
+.mobile-header__plus {
+  width: 24px;
+  height: 24px;
+  display: block;
+  color: #000;
 }
 
 
@@ -193,7 +245,6 @@ button { font: inherit; }
    MAIN COLUMN
    ============================================= */
 
-/* ≥1440px: контент фиксирован 1024px, центрируется в зоне справа от сайдбара */
 .main {
   margin-left: var(--sidebar-w);
   width: calc(100vw - var(--sidebar-w));
@@ -203,12 +254,11 @@ button { font: inherit; }
   align-items: center;
 }
 
-/* Секции получают фиксированную ширину и центрируются внутри .main */
 .hero,
 .cases,
 .footer {
-  width: 1024px;
-  max-width: 1024px;
+  width: 100%;
+  max-width: var(--content-max);
   box-sizing: border-box;
 }
 
@@ -218,59 +268,61 @@ button { font: inherit; }
    ============================================= */
 
 .hero {
-  padding-top: calc(40px * var(--s));
+  padding-top: 40px;
   display: flex;
   flex-direction: column;
-  gap: calc(40px * var(--s));
+  gap: 40px;
 }
 
 .hero__content {
   display: flex;
   flex-direction: column;
-  gap: calc(32px * var(--s));
+  gap: 32px;
 }
 
 .hero__text {
-  width: calc(796px * var(--s));
+  width: 100%;
+  max-width: 796px;
   font-family: var(--ff-sans);
   font-weight: 500;
-  font-size: calc(36px * var(--s));
-  line-height: calc(40px * var(--s));
-  letter-spacing: calc(-0.72px * var(--s));
+  font-size: var(--fs-hero);
+  line-height: var(--lh-hero);
+  letter-spacing: var(--tr-hero);
   color: var(--text);
 }
 .hero__text p { margin: 0; }
-.hero__text p + p { margin-top: calc(24px * var(--s)); }
+.hero__text p + p { margin-top: 24px; }
 
 .hero__media {
-  width: calc(1024px * var(--s));
-  height: calc(576px * var(--s));
-  border-radius: calc(24px * var(--s));
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-hero);
+  overflow: hidden;
 }
 
 
 /* =============================================
-   TAGS / TAG (shared between hero и кейсы)
+   TAGS
    ============================================= */
 
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(8px * var(--s));
+  gap: var(--gap-tag);
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: calc(12px * var(--s)) calc(16px * var(--s));
+  padding: 12px 16px;
   border: 1px solid var(--border-tag);
   border-radius: 1000px;
   font-family: var(--ff-sans);
-  font-weight: 500;
-  font-size: calc(16px * var(--s));
-  line-height: calc(20px * var(--s));
-  letter-spacing: calc(-0.16px * var(--s));
+  font-weight: 400;
+  font-size: var(--fs-tag);
+  line-height: var(--lh-tag);
+  letter-spacing: var(--tr-tag);
   color: var(--text);
   white-space: nowrap;
 }
@@ -281,11 +333,11 @@ button { font: inherit; }
    ============================================= */
 
 .cases {
-  margin-top: calc(100px * var(--s));
+  margin-top: var(--gap-section);
 }
 
 .cases__head {
-  padding-bottom: calc(24px * var(--s));
+  padding-bottom: 24px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -293,9 +345,9 @@ button { font: inherit; }
   margin: 0;
   font-family: var(--ff-sans);
   font-weight: 500;
-  font-size: calc(32px * var(--s));
-  line-height: calc(40px * var(--s));
-  letter-spacing: calc(-0.64px * var(--s));
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tr-title);
   color: var(--text);
 }
 
@@ -304,54 +356,52 @@ button { font: inherit; }
   flex-direction: column;
 }
 
-/* Hairline-разделители между кейсами */
 .case + .case { border-top: 1px solid var(--border); }
 
 
 /* =============================================
-   CASE — карточка проекта
+   CASE
    ============================================= */
 
 .case {
-  padding: calc(60px * var(--s)) 0;
+  padding: var(--pad-case) 0;
 }
 
 .case__link {
   display: flex;
   flex-direction: column;
-  gap: calc(40px * var(--s));
+  gap: 40px;
   cursor: pointer;
   transition: opacity 0.2s ease;
 }
 .case__link:hover { opacity: 0.95; }
 
-/* Шапка кейса: 2 колонки × 2 ряда */
 .case__content {
-  display: flex;
-  gap: calc(98px * var(--s));
-  width: calc(938px * var(--s));
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-case-content);
+  width: 100%;
 }
 
 .case__col {
   display: flex;
   flex-direction: column;
-  gap: calc(36px * var(--s));
-  width: calc(420px * var(--s));
-  flex-shrink: 0;
+  gap: var(--gap-col);
+  min-width: 0;
 }
 
 .case__row {
   display: flex;
   flex-direction: column;
-  gap: calc(8px * var(--s));
+  gap: var(--gap-row);
 }
 
 .case__label {
   font-family: var(--ff-sans);
-  font-weight: 500;
-  font-size: calc(16px * var(--s));
-  line-height: calc(22px * var(--s));
-  letter-spacing: calc(-0.16px * var(--s));
+  font-weight: 400;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  letter-spacing: var(--tr-label);
   color: var(--text-label);
 }
 
@@ -359,9 +409,9 @@ button { font: inherit; }
   margin: 0;
   font-family: var(--ff-sans);
   font-weight: 500;
-  font-size: calc(32px * var(--s));
-  line-height: calc(36px * var(--s));
-  letter-spacing: calc(-0.64px * var(--s));
+  font-size: var(--fs-value);
+  line-height: var(--lh-value);
+  letter-spacing: var(--tr-value);
   color: var(--text);
 }
 
@@ -369,58 +419,54 @@ button { font: inherit; }
   margin: 0;
   font-family: var(--ff-sans);
   font-weight: 400;
-  font-size: calc(16px * var(--s));
-  line-height: calc(22px * var(--s));
-  letter-spacing: calc(-0.16px * var(--s));
+  font-size: var(--fs-desc);
+  line-height: var(--lh-desc);
+  letter-spacing: var(--tr-desc);
   color: var(--text);
 }
 
-/* Постер кейса */
 .case__media {
-  width: calc(1024px * var(--s));
-  height: calc(576px * var(--s));
-  border-radius: calc(20px * var(--s));
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-case);
+  overflow: hidden;
   position: relative;
 }
 
-/* Награды (только на Banxe) */
 .case__awards {
   position: absolute;
-  top: calc(16px * var(--s));
-  right: calc(16px * var(--s));
+  top: 16px;
+  right: 16px;
   display: flex;
   flex-direction: column;
-  gap: calc(4px * var(--s));
+  gap: 4px;
   z-index: 2;
   pointer-events: none;
 }
 
 .case__award {
-  width: calc(60px * var(--s));
-  height: calc(60px * var(--s));
+  width: 60px;
+  height: 60px;
   display: block;
   object-fit: contain;
 }
 
 
 /* =============================================
-   VIDEO TILE — общий компонент видео-плитки
+   VIDEO TILE
    ============================================= */
 
 .video-tile {
   position: relative;
   overflow: hidden;
-  background:
-    linear-gradient(135deg, #2a2a2a 0%, #111 100%);
+  background: linear-gradient(135deg, #2a2a2a 0%, #111 100%);
   isolation: isolate;
 }
 
 .video-tile--hero {
-  background:
-    linear-gradient(135deg, #3a3a3a 0%, #0e0e0e 100%);
+  background: linear-gradient(135deg, #3a3a3a 0%, #0e0e0e 100%);
 }
 
-/* Градиентные плейсхолдеры — у каждой карточки свой оттенок */
 .case:nth-of-type(1) .video-tile { background: linear-gradient(135deg, #3b1a8a 0%, #6a3acb 100%); }
 .case:nth-of-type(2) .video-tile { background: linear-gradient(135deg, #c98a3a 0%, #5a2f12 100%); }
 .case:nth-of-type(3) .video-tile { background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); }
@@ -446,79 +492,79 @@ button { font: inherit; }
    ============================================= */
 
 .footer {
-  margin-top: calc(100px * var(--s));
-  padding: calc(24px * var(--s)) 0;
+  margin-top: var(--gap-section);
+  padding: 24px 0;
   display: flex;
   flex-direction: column;
-  gap: calc(150px * var(--s));
+  gap: 150px;
+  overflow: hidden;
 }
 
 .footer__top {
-  width: calc(983px * var(--s));
+  width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: calc(32px * var(--s));
+  gap: 32px;
+  flex-wrap: wrap;
 }
 
 .footer__cta {
   margin: 0;
-  width: calc(309px * var(--s));
+  max-width: 309px;
   font-family: var(--ff-sans);
   font-weight: 500;
-  font-size: calc(24px * var(--s));
-  line-height: calc(28px * var(--s));
-  letter-spacing: calc(-0.48px * var(--s));
+  font-size: var(--fs-cta);
+  line-height: var(--lh-cta);
+  letter-spacing: var(--tr-cta);
   color: var(--text);
 }
 
 .footer__cols {
-  width: calc(420px * var(--s));
   display: flex;
-  justify-content: space-between;
-  gap: calc(32px * var(--s));
+  gap: 64px;
+  flex-wrap: wrap;
 }
 
 .footer__col {
   display: flex;
   flex-direction: column;
-  gap: calc(8px * var(--s));
+  gap: 8px;
 }
 
 .footer__label {
   margin: 0;
   font-family: var(--ff-sans);
   font-weight: 400;
-  font-size: calc(14px * var(--s));
-  line-height: calc(20px * var(--s));
-  letter-spacing: calc(-0.14px * var(--s));
+  font-size: var(--fs-link);
+  line-height: var(--lh-link);
+  letter-spacing: var(--tr-link);
   color: var(--text-label);
 }
 
 .footer__links {
   display: flex;
   flex-direction: column;
-  gap: calc(4px * var(--s));
+  gap: 4px;
 }
 
 .footer__links a {
   font-family: var(--ff-sans);
   font-weight: 500;
-  font-size: calc(14px * var(--s));
-  line-height: calc(20px * var(--s));
-  letter-spacing: calc(-0.14px * var(--s));
+  font-size: var(--fs-link);
+  line-height: var(--lh-link);
+  letter-spacing: var(--tr-link);
   color: var(--text);
   transition: opacity 0.15s ease;
 }
 .footer__links a:hover { opacity: 0.7; }
 
-/* Гигантская арт-надпись «Futer» */
 .footer__art {
   margin: 0;
   font-family: var(--ff-display);
-  font-size: calc(320px * var(--s));
-  line-height: calc(300px * var(--s));
-  letter-spacing: calc(-12.8px * var(--s));
+  font-size: clamp(96px, 30vw, 320px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
   color: var(--text);
   white-space: nowrap;
   user-select: none;
@@ -526,119 +572,62 @@ button { font: inherit; }
 
 
 /* =============================================
-   INTERMEDIATE (1024–1440px)
-   Контент заполняет всю доступную ширину после сайдбара.
-   Фиксированные px-ширины внутри секций переключаются на fluid.
+   BREAKPOINT 1: <1440 — content fluid (sidebar still visible)
    ============================================= */
 
-@media (min-width: 1024px) and (max-width: 1439.98px) {
-  /* .main заполняет зону, тянется по ширине, добавляем горизонтальный padding */
+@media (max-width: 1439.98px) {
   .main {
     align-items: stretch;
-    padding: 0 clamp(20px, 2.78vw, 40px);
+    padding-left: var(--pad-x);
+    padding-right: var(--pad-x);
   }
 
-  /* Секции — во всю доступную ширину.
-     Внутренности секций (hero__text, hero__media, case__content,
-     case__col, case__media, footer__top) НЕ переопределяются —
-     остаются на старом calc(N * var(--s)) скейле. */
   .hero,
   .cases,
   .footer {
-    width: 100%;
     max-width: 100%;
   }
 }
 
 
 /* =============================================
-   MOBILE / TABLET FALLBACK (<1024px)
-   Сайдбар скрыт, контент в одну колонку. Полноценный
-   мобильный лейаут будет сделан отдельно.
+   BREAKPOINT 2: <1200 — sidebar hidden, mobile header
    ============================================= */
 
-@media (max-width: 1023.98px) {
+@media (max-width: 1199.98px) {
+  :root {
+    --sidebar-w: 0px;
+    --gap-case-content: 64px;
+  }
+
   .sidebar { display: none; }
+  .mobile-header { display: block; }
 
   .main {
     margin-left: 0;
     width: 100%;
-    max-width: 720px;
-    margin-right: auto;
-    align-items: stretch;
-    padding: 24px 20px 80px;
+    padding-top: var(--header-h);
+  }
+}
+
+
+/* =============================================
+   BREAKPOINT 3: <640 — narrow viewport fallback
+   ============================================= */
+
+@media (max-width: 639.98px) {
+  :root {
+    --fs-hero: 24px;  --lh-hero: 28px;  --tr-hero: -0.48px;
+    --fs-title: 24px; --lh-title: 28px; --tr-title: -0.48px;
+    --fs-value: 22px; --lh-value: 26px; --tr-value: -0.44px;
+    --fs-cta: 18px;   --lh-cta: 24px;
+    --gap-section: 56px;
+    --gap-case-content: 24px;
+    --pad-case: 32px;
+    --pad-x: 20px;
   }
 
-  .hero,
-  .cases,
-  .footer {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* Hero */
-  .hero { padding-top: 24px; gap: 24px; }
-  .hero__content { gap: 24px; }
-  .hero__text {
-    width: 100%;
-    font-size: 24px;
-    line-height: 28px;
-    letter-spacing: -0.48px;
-  }
+  .case__content { grid-template-columns: 1fr; }
+  .footer { gap: 56px; }
   .hero__text p + p { margin-top: 16px; }
-  .hero__media { width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 16px; }
-
-  /* Tags */
-  .tag {
-    padding: 8px 12px;
-    font-size: 14px;
-    line-height: 18px;
-    letter-spacing: -0.14px;
-  }
-
-  /* Cases */
-  .cases { margin-top: 56px; }
-  .cases__title { font-size: 24px; line-height: 28px; letter-spacing: -0.48px; }
-
-  .case { padding: 32px 0; }
-  .case__link { gap: 24px; }
-  .case__content {
-    flex-direction: column;
-    width: 100%;
-    gap: 24px;
-  }
-  .case__col { width: 100%; gap: 20px; }
-  .case__row { gap: 6px; }
-  .case__label { font-size: 14px; line-height: 18px; letter-spacing: -0.14px; }
-  .case__value { font-size: 24px; line-height: 28px; letter-spacing: -0.48px; }
-  .case__desc { font-size: 15px; line-height: 22px; letter-spacing: -0.15px; }
-
-  .case__media {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    border-radius: 16px;
-  }
-  .case__awards { top: 12px; right: 12px; }
-  .case__award { width: 40px; height: 40px; }
-
-  /* Footer */
-  .footer { margin-top: 56px; gap: 56px; padding: 24px 0; }
-  .footer__top {
-    width: 100%;
-    flex-direction: column;
-    gap: 32px;
-  }
-  .footer__cta {
-    width: 100%;
-    font-size: 18px;
-    line-height: 24px;
-    letter-spacing: -0.36px;
-  }
-  .footer__cols { width: 100%; }
-  .footer__art {
-    font-size: 96px;
-    line-height: 96px;
-    letter-spacing: -3.8px;
-  }
 }
