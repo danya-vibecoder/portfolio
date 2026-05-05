@@ -503,10 +503,8 @@ button { font: inherit; }
 .footer__top {
   width: 100%;
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  gap: 32px;
-  flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .footer__cta {
@@ -522,8 +520,9 @@ button { font: inherit; }
 
 .footer__cols {
   display: flex;
-  gap: 64px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 465px;
+  flex-shrink: 0;
 }
 
 .footer__col {
@@ -550,7 +549,7 @@ button { font: inherit; }
 
 .footer__links a {
   font-family: var(--ff-sans);
-  font-weight: 500;
+  font-weight: 400;
   font-size: var(--fs-link);
   line-height: var(--lh-link);
   letter-spacing: var(--tr-link);
@@ -587,6 +586,16 @@ button { font: inherit; }
   .footer {
     max-width: 100%;
   }
+
+  .footer__cols {
+    width: calc(100% - 518px);
+  }
+
+  .footer__label,
+  .footer__links a {
+    font-size: 14px;
+    line-height: 20px;
+  }
 }
 
 
@@ -608,6 +617,7 @@ button { font: inherit; }
     width: 100%;
     padding-top: var(--header-h);
   }
+
 }
 
 
@@ -630,4 +640,83 @@ button { font: inherit; }
   .case__content { grid-template-columns: 1fr; }
   .footer { gap: 56px; }
   .hero__text p + p { margin-top: 16px; }
+
+  .footer__top { flex-direction: column; gap: 32px; }
+  .footer__cta { max-width: none; }
+  .footer__cols { width: 100%; }
+}
+
+
+/* =============================================
+   BREAKPOINT 4: <1024 — MOBILE LAYOUT
+   Must be last to override narrower breakpoints above.
+   ============================================= */
+
+@media (max-width: 1023.98px) {
+  :root {
+    --pad-x: 16px;
+    --fs-hero: 28px;  --lh-hero: 32px;  --tr-hero: -0.56px;
+    --fs-title: 28px; --lh-title: 32px; --tr-title: -0.56px;
+    --fs-tag: 12px;   --lh-tag: 16px;   --tr-tag: -0.12px;
+    --radius-case: 16px;
+    --pad-case: 40px;
+    --gap-section: 80px;
+    --gap-col: 8px;
+  }
+
+  /* Hero */
+  .hero {
+    padding-top: 32px;
+    gap: 32px;
+  }
+
+  .hero__content {
+    gap: 16px;
+  }
+
+  .hero__text p + p {
+    margin-top: 24px;
+  }
+
+  /* Full-bleed hero video, taller than desktop */
+  .hero__media {
+    aspect-ratio: 390 / 556;
+    border-radius: 0;
+    margin-left: calc(-1 * var(--pad-x));
+    margin-right: calc(-1 * var(--pad-x));
+    width: calc(100% + 2 * var(--pad-x));
+    max-width: none;
+  }
+
+  /* Cases: single column, square media cards */
+  .case__content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .case__link {
+    gap: 24px;
+  }
+
+  .case__media {
+    order: -1;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Hide all field labels (Project / Description / My role / Tags) */
+  .case__label {
+    display: none;
+  }
+
+  /* Hide entire "My role" row (first row of the second column) */
+  .case__col:nth-child(2) > .case__row:first-child {
+    display: none;
+  }
+
+  /* Description text → gray */
+  .case__desc {
+    color: var(--text-label);
+  }
 }

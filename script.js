@@ -72,3 +72,35 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 })();
+
+
+/* =============================================
+   MOBILE CASE VIDEOS — autoplay on scroll
+   ============================================= */
+
+(function () {
+  "use strict";
+
+  if (window.matchMedia("(hover: hover)").matches) return;
+
+  var videos = document.querySelectorAll(".case .video-tile__video");
+  if (!videos.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    videos.forEach(function (v) { v.play && v.play().catch(function () {}); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var v = entry.target;
+      if (entry.isIntersecting) {
+        v.play && v.play().catch(function () {});
+      } else {
+        v.pause && v.pause();
+      }
+    });
+  }, { threshold: 0.25 });
+
+  videos.forEach(function (v) { observer.observe(v); });
+})();
