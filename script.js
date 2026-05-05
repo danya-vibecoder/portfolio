@@ -3,11 +3,11 @@
    ============================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
-  var elMonth = document.querySelector(".clock__month");
-  var elDay   = document.querySelector(".clock__day");
-  var elTime  = document.querySelector(".clock__time");
+  var monthEls = document.querySelectorAll(".clock__month");
+  var dayEls   = document.querySelectorAll(".clock__day");
+  var timeEls  = document.querySelectorAll(".clock__time");
 
-  if (!elMonth || !elDay || !elTime) return;
+  if (!monthEls.length) return;
 
   var tz = "Asia/Tbilisi";
 
@@ -20,9 +20,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function tick() {
     var now = new Date();
-    elMonth.textContent = fmtMonth.format(now);
-    elDay.textContent   = fmtDay.format(now);
-    elTime.textContent  = fmtTime.format(now);
+    var m = fmtMonth.format(now);
+    var d = fmtDay.format(now);
+    var t = fmtTime.format(now);
+    monthEls.forEach(function (el) { el.textContent = m; });
+    dayEls.forEach(function (el)   { el.textContent = d; });
+    timeEls.forEach(function (el)  { el.textContent = t; });
   }
 
   tick();
@@ -31,76 +34,124 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 /* =============================================
-   HOVER VIDEOS
-   Воспроизводим видео при наведении, на mouseleave
-   ставим паузу и сбрасываем на начало.
-   Включается только на устройствах с реальным ховером
-   (десктоп с мышью). На тачах — не запускаем.
+   MOBILE / TABLET MENU
+   ============================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+
+  var menu = document.getElementById("menu");
+  var openBtn = document.querySelector(".mobile-header__menu");
+  if (!menu || !openBtn) return;
+
+  var closeBtn = menu.querySelector(".menu__close");
+  var overlay = menu.querySelector(".menu__overlay");
+  var desktopMq = window.matchMedia("(min-width: 1024px)");
+
+  function setOpen(isOpen) {
+    if (isOpen && desktopMq.matches) return;
+    menu.classList.toggle("menu--open", isOpen);
+    menu.setAttribute("aria-hidden", String(!isOpen));
+    openBtn.setAttribute("aria-expanded", String(isOpen));
+  }
+
+  openBtn.addEventListener("click", function () {
+    setOpen(!menu.classList.contains("menu--open"));
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", function () { setOpen(false); });
+  }
+
+  if (overlay) {
+    overlay.addEventListener("click", function () { setOpen(false); });
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && menu.classList.contains("menu--open")) {
+      setOpen(false);
+    }
+  });
+
+  function handleViewport(e) {
+    if (e.matches) setOpen(false);
+  }
+  if (desktopMq.addEventListener) desktopMq.addEventListener("change", handleViewport);
+  else if (desktopMq.addListener) desktopMq.addListener(handleViewport);
+});
+
+
+/* =============================================
+   LAZY LOAD VIDEOS — preload sources when card enters viewport
    ============================================= */
 
 (function () {
   "use strict";
 
-  // Тач-устройства не получают ховер-видео.
-  if (!window.matchMedia("(hover: hover)").matches) return;
+  var medias = document.querySelectorAll(".case__media");
+  if (!medias.length) return;
 
-  // Только видео внутри карточек — hero autoplay, его не трогаем.
-  var tiles = document.querySelectorAll(".case .video-tile");
-
-  tiles.forEach(function (tile) {
-    var video = tile.querySelector(".video-tile__video");
-    if (!video) return;
-
-    // Если у <video> ещё нет источников (плейсхолдер) — не пытаемся играть.
-    var hasSource = video.querySelector("source");
-    if (!hasSource) return;
-
-    // Триггер по родителю (вся плитка), чтобы зона ховера совпадала с визуалом.
-    var trigger = tile.closest(".case__link") || tile;
-
-    trigger.addEventListener("mouseenter", function () {
-      var p = video.play();
-      if (p && typeof p.catch === "function") {
-        // Браузер может вернуть Promise — глушим NotAllowedError на тачах/иос-PWA.
-        p.catch(function () {});
-      }
+  function loadVideo(video) {
+    var sources = video.querySelectorAll("source[data-src]");
+    if (!sources.length) return;
+    sources.forEach(function (s) {
+      if (!s.src) s.src = s.dataset.src;
     });
+    video.load();
+  }
 
-    trigger.addEventListener("mouseleave", function () {
-      video.pause();
-      video.currentTime = 0;
+  if (!("IntersectionObserver" in window)) {
+    medias.forEach(function (m) {
+      var v = m.querySelector(".case__video");
+      if (v) loadVideo(v);
     });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries, obs) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      var video = entry.target.querySelector(".case__video");
+      if (video) loadVideo(video);
+      obs.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.3,
+    rootMargin: "0px 0px -20% 0px"
+  });
+
+  medias.forEach(function (m) {
+    if (m.querySelector(".case__video")) observer.observe(m);
   });
 })();
 
 
 /* =============================================
-   MOBILE CASE VIDEOS — autoplay on scroll
+   PROGRESSIVE MEDIA — fade poster → video, play once, hold last frame
    ============================================= */
 
 (function () {
   "use strict";
 
-  if (window.matchMedia("(hover: hover)").matches) return;
+  var videos = document.querySelectorAll(".case__video");
 
-  var videos = document.querySelectorAll(".case .video-tile__video");
-  if (!videos.length) return;
-
-  if (!("IntersectionObserver" in window)) {
-    videos.forEach(function (v) { v.play && v.play().catch(function () {}); });
-    return;
+  function activate(video) {
+    var media = video.parentElement;
+    if (media) media.classList.add("is-loaded");
+    var p = video.play();
+    if (p && typeof p.catch === "function") p.catch(function () {});
   }
 
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      var v = entry.target;
-      if (entry.isIntersecting) {
-        v.play && v.play().catch(function () {});
-      } else {
-        v.pause && v.pause();
-      }
-    });
-  }, { threshold: 0.25 });
+  videos.forEach(function (video) {
+    if (!video.parentElement) return;
 
-  videos.forEach(function (v) { observer.observe(v); });
+    if (video.readyState >= 2) {
+      activate(video);
+    } else {
+      video.addEventListener("loadeddata", function () { activate(video); });
+    }
+
+    // On finish: do nothing — keep last frame visible, never reset to 0.
+    video.addEventListener("ended", function () {});
+  });
 })();
