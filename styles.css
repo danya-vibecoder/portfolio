@@ -83,7 +83,14 @@
 
 html, body { margin: 0; padding: 0; }
 
-html { background: var(--bg); }
+html {
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 
 body.page {
   min-height: 100vh;
@@ -371,9 +378,9 @@ button { font: inherit; }
   display: flex;
   flex-direction: column;
   gap: 40px;
-  cursor: pointer;
   transition: opacity 0.2s ease;
 }
+.case__link[data-cursor="view"] { cursor: pointer; }
 .case__link:hover { opacity: 0.95; }
 
 .case__content {
@@ -903,4 +910,436 @@ button { font: inherit; }
 @media (min-width: 1024px) {
   .menu { display: none; }
   .mobile-header__menu { display: none; }
+}
+
+
+/* =============================================
+   CUSTOM HOVER CURSOR — desktop ≥1024 + hover-capable only
+   ============================================= */
+
+.hover-cursor {
+  display: none;
+}
+
+@media (hover: hover) and (min-width: 1024px) {
+  /* Outer layer: position only — written every frame by rAF, no transition */
+  .hover-cursor {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9000;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  /* Inner layer: the actual pill — opacity + scale transitioned here, AND
+     backdrop-filter lives here. The blur MUST be on the same element that
+     animates opacity; if it lived on a descendant of an opacity<1 parent,
+     the children would render into an offscreen group and the blur would
+     sample the (empty) group instead of the page. */
+  .hover-cursor__inner {
+    transform: translate(-50%, -50%) scale(0.96);
+    opacity: 0;
+    transition: opacity 200ms ease, transform 200ms ease;
+    will-change: transform, opacity, backdrop-filter;
+
+    display: inline-flex;
+    align-items: center;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+  }
+
+  .hover-cursor.is-visible .hover-cursor__inner {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Both variants share the pill content; only one is shown at a time */
+  .hover-cursor__variant {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  .hover-cursor[data-variant="view"] .hover-cursor__variant--view,
+  .hover-cursor[data-variant="soon"] .hover-cursor__variant--soon {
+    display: inline-flex;
+  }
+
+  .hover-cursor__icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  .hover-cursor__label {
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.48px;
+    color: #ffffff;
+  }
+
+  /* Hide the system cursor over cards that own a custom cursor */
+  .case__link[data-cursor] {
+    cursor: none;
+  }
+  .case__link[data-cursor] * {
+    cursor: none;
+  }
+}
+
+
+/* =============================================
+   EXPERIENCE PAGE
+   All rules are page-scoped to .page--experience so the homepage is untouched.
+   Base styles match the ≥1440 Figma frame; breakpoints layer adjustments below.
+   ============================================= */
+
+/* Section frame */
+.page--experience .experience {
+  width: 100%;
+  max-width: var(--content-max);
+  box-sizing: border-box;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.page--experience .experience__title {
+  margin: 0;
+  max-width: 568px;
+  font-family: var(--ff-sans);
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 40px;
+  letter-spacing: -0.72px;
+  color: var(--text);
+}
+
+/* List of experience cards */
+.page--experience .experience__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+/* 1px white-10% divider between cards */
+.page--experience .exp-item + .exp-item {
+  padding-top: 60px;
+  border-top: 1px solid var(--border);
+}
+
+/* Card layout: two columns, left grows to fill, right is locked at 506px */
+.page--experience .exp-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* LEFT — company column */
+.page--experience .exp-item__company {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.page--experience .exp-item__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page--experience .exp-item__name {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 36px;
+  letter-spacing: -0.32px;
+  color: var(--text);
+}
+
+.page--experience .exp-item__period {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: -0.16px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Logo: 44x44; "tile" variant wraps in a white rounded square */
+.page--experience .exp-item__logo {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.page--experience .exp-item__logo--bare {
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.page--experience .exp-item__logo--tile {
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+/* Zus uses a tile that contains a smaller inner mark */
+.page--experience .exp-item__logo--zus {
+  position: relative;
+}
+.page--experience .exp-item__logo--zus img {
+  position: absolute;
+  width: 33.438px;
+  height: 13.21px;
+  top: 15px;
+  left: 5px;
+  display: block;
+}
+
+/* Freelance: 4 logo tiles overlapping */
+.page--experience .exp-item__logos {
+  position: relative;
+  width: 162px;
+  height: 44px;
+  flex-shrink: 0;
+}
+.page--experience .exp-item__logo-tile {
+  position: absolute;
+  top: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #fff;
+  object-fit: cover;
+  overflow: hidden;
+}
+.page--experience .exp-item__logo-tile:nth-child(1) { left: 0; }
+.page--experience .exp-item__logo-tile:nth-child(2) { left: 34px; border: 2px solid #000; }
+.page--experience .exp-item__logo-tile:nth-child(3) { left: 70px; border: 2px solid #000; }
+.page--experience .exp-item__logo-tile:nth-child(4) { left: 105px; border: 2px solid #000; }
+
+/* RIGHT — role column locked to 506px on desktop */
+.page--experience .exp-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 0 0 506px;
+  max-width: 506px;
+  min-width: 0;
+}
+
+.page--experience .exp-item__role {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 36px;
+  letter-spacing: -0.32px;
+  color: var(--text);
+}
+
+.page--experience .exp-item__bullets {
+  list-style: disc;
+  padding-left: 24px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-family: var(--ff-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: -0.16px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.page--experience .exp-item__bullets li::marker {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Team avatar cluster: overlapping 32x32 circles */
+.page--experience .avatars {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+}
+.page--experience .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff center / cover no-repeat;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.page--experience .avatar + .avatar {
+  margin-left: -4px;          /* 32 - 4 = 28px effective stride, matches Figma */
+  border: 1px solid #000;
+}
+.page--experience .avatar--count {
+  background: #1b1b1b;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ff-sans);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.12px;
+}
+
+/* Footer-without-Futer variant: drop the large decorative type entirely.
+   No top border — the Figma has plain space between the last card and the
+   footer, not a divider. */
+.page--experience .footer--compact {
+  margin-top: var(--gap-section);
+  padding: 24px 0 60px;
+  gap: 0;
+}
+
+/* Match the existing fluid behavior at <1440 so the experience section fills
+   the .main content area (mirrors what styles.css does for .hero/.cases). */
+@media (max-width: 1439.98px) {
+  .page--experience .experience {
+    max-width: 100%;
+  }
+}
+
+
+/* =============================================
+   EXPERIENCE — Mobile (≤499px)
+   This is NOT a desktop scale-down. The card header becomes horizontal,
+   typography shrinks, and the footer CTA grows.
+   ============================================= */
+
+@media (max-width: 499.98px) {
+  .page--experience .experience {
+    padding-top: 32px;
+    gap: 36px;
+  }
+
+  .page--experience .experience__title {
+    max-width: 285px;
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -0.56px;
+  }
+
+  /* Card: stack columns vertically, header row stays horizontal inside */
+  .page--experience .exp-item {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .page--experience .exp-item__company {
+    width: 100%;
+    gap: 24px;
+  }
+
+  /* Header row: logo left, name+date right, vertically centered */
+  .page--experience .exp-item__company {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Meta block shrinks and right-aligns to ~121px */
+  .page--experience .exp-item__meta {
+    width: 121px;
+    flex-shrink: 0;
+    gap: 4px;
+  }
+
+  .page--experience .exp-item__name {
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: -0.16px;
+  }
+
+  .page--experience .exp-item__period {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -0.12px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Body re-flows to full width */
+  .page--experience .exp-item__body {
+    flex: 1 1 auto;
+    max-width: none;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .page--experience .exp-item__role {
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.24px;
+  }
+
+  /* Bullets keep 16px but width is constrained by parent */
+  .page--experience .exp-item__bullets {
+    padding-left: 24px;
+  }
+
+  /* Freelance cluster: same logos but top-anchored on mobile */
+  .page--experience .exp-item__logos {
+    width: 152px;
+  }
+
+  /* Mobile dividers come from the existing border-top rule above */
+  .page--experience .exp-item + .exp-item {
+    padding-top: 36px;
+  }
+
+  /* Mobile footer: CTA grows to 28px (this matches the mobile Figma),
+     and link text becomes Medium per the mocks. */
+  .page--experience .footer--compact {
+    padding: 32px 0 60px;
+    margin-top: 60px;
+  }
+
+  .page--experience .footer__cta {
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -0.56px;
+  }
+
+  .page--experience .footer__links a {
+    font-weight: 500;
+  }
+}
+
+
+/* =============================================
+   EXPERIENCE — Header alignment on tablet (500–1199)
+   Already inherits the existing mobile-header + no-sidebar behavior from the
+   global styles. Just bump the top padding a touch so cards clear the header.
+   ============================================= */
+
+@media (max-width: 1199.98px) and (min-width: 500px) {
+  .page--experience .experience {
+    padding-top: 40px;
+  }
 }

@@ -17,8 +17,10 @@
           <span>Projects</span>
           <img class="sidebar__asterisk" src="assets/images/asterisk.svg" alt="" aria-hidden="true" />
         </a>
+        <!-- Temporarily hidden until ready — restore when content is live
         <a href="/experience.html" class="sidebar__nav-item">Experience</a>
         <a href="/about.html" class="sidebar__nav-item">About me</a>
+        -->
         <a href="#" class="sidebar__nav-item">Get CV</a>
         <a href="mailto:dankick.work@gmail.com" class="sidebar__nav-item">Contacts</a>
       </nav>
@@ -51,8 +53,10 @@
       </button>
       <nav class="menu__nav" aria-label="Sections">
         <a href="/" class="menu__nav-item menu__nav-item--active" aria-current="page">Projects</a>
+        <!-- Temporarily hidden until ready — restore when content is live
         <a href="/experience.html" class="menu__nav-item">Experience</a>
         <a href="/about.html" class="menu__nav-item">About me</a>
+        -->
         <a href="#" class="menu__nav-item">Get CV</a>
         <a href="mailto:dankick.work@gmail.com" class="menu__nav-item">Contacts</a>
       </nav>
@@ -100,7 +104,7 @@
       <div class="cases__list">
         <!-- CASE 1 — Banxe -->
         <article class="case">
-          <a class="case__link" href="https://danilegorov.notion.site/Banxe-4-4-Tagline--357c35fc27d080b6a092ef1cdd6421b9?source=copy_link" target="_blank" rel="noopener noreferrer">
+          <a class="case__link" data-cursor="view" href="https://danilegorov.notion.site/Banxe-4-4-Tagline--357c35fc27d080b6a092ef1cdd6421b9?source=copy_link" target="_blank" rel="noopener noreferrer">
             <div class="case__content">
               <div class="case__col">
                 <div class="case__row">
@@ -144,7 +148,7 @@
 
         <!-- CASE 2 — Wrobe -->
         <article class="case">
-          <a class="case__link" href="https://www.notion.so/danilegorov/WROBE-3-MVP-356c35fc27d080aa8b02ffb032ceb74d?source=copy_link" target="_blank" rel="noopener noreferrer">
+          <a class="case__link" data-cursor="view" href="https://www.notion.so/danilegorov/WROBE-3-MVP-356c35fc27d080aa8b02ffb032ceb74d?source=copy_link" target="_blank" rel="noopener noreferrer">
             <div class="case__content">
               <div class="case__col">
                 <div class="case__row">
@@ -185,7 +189,7 @@
 
         <!-- CASE 3 — Effective security -->
         <article class="case">
-          <a class="case__link" href="https://example.notion.site/effective-security" target="_blank" rel="noopener">
+          <div class="case__link case__link--soon" data-cursor="soon" role="group" aria-label="Effective security — coming soon">
             <div class="case__content">
               <div class="case__col">
                 <div class="case__row">
@@ -216,12 +220,12 @@
             <div class="case__media video-tile">
               <img class="video-tile__image" src="assets/images/Effective%20security.png" alt="Effective security project" />
             </div>
-          </a>
+          </div>
         </article>
 
         <!-- CASE 4 — Locus -->
         <article class="case">
-          <a class="case__link" href="https://example.notion.site/locus" target="_blank" rel="noopener">
+          <div class="case__link case__link--soon" data-cursor="soon" role="group" aria-label="Locus — coming soon">
             <div class="case__content">
               <div class="case__col">
                 <div class="case__row">
@@ -256,7 +260,7 @@
                 <source data-src="assets/videos/Locus.mp4" type="video/mp4">
               </video>
             </div>
-          </a>
+          </div>
         </article>
       </div>
     </section>
@@ -302,6 +306,26 @@
       <p class="footer__art" aria-hidden="true">Futer</p>
     </footer>
   </main>
+
+  <!-- Custom hover cursor (desktop ≥1024 + hover-capable only) -->
+  <div class="hover-cursor" aria-hidden="true">
+    <div class="hover-cursor__inner">
+      <div class="hover-cursor__variant hover-cursor__variant--view">
+        <svg class="hover-cursor__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 5V13C5 14.6569 6.34315 16 8 16H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 12L19 16L15 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="hover-cursor__label">view case</span>
+      </div>
+      <div class="hover-cursor__variant hover-cursor__variant--soon">
+        <svg class="hover-cursor__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 7V12L15.5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="hover-cursor__label">coming soon</span>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js" defer></script>
 </body>

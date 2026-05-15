@@ -155,3 +155,93 @@ document.addEventListener("DOMContentLoaded", function () {
     video.addEventListener("ended", function () {});
   });
 })();
+
+
+/* =============================================
+   CUSTOM HOVER CURSOR — follows mouse over project cards
+   Activates only on hover-capable devices ≥1024px wide.
+   ============================================= */
+
+(function () {
+  "use strict";
+
+  var mq = window.matchMedia("(hover: hover) and (min-width: 1024px)");
+  var cursor = document.querySelector(".hover-cursor");
+  var targets = document.querySelectorAll(".case__link[data-cursor]");
+  if (!cursor || !targets.length) return;
+
+  // Interpolated position state
+  var targetX = 0, targetY = 0;
+  var currentX = 0, currentY = 0;
+  var primed = false;   // becomes true after first mousemove so we don't snap from 0,0
+  var rafId = null;
+
+  // Smoothing factor (0..1). Higher = snappier, lower = more lag.
+  var EASE = 0.18;
+
+  function onMove(e) {
+    targetX = e.clientX;
+    targetY = e.clientY;
+    if (!primed) {
+      // Place the cursor at the pointer for the first frame to avoid a long trail-in.
+      currentX = targetX;
+      currentY = targetY;
+      primed = true;
+    }
+    if (rafId === null) rafId = requestAnimationFrame(tick);
+  }
+
+  function tick() {
+    rafId = null;
+    currentX += (targetX - currentX) * EASE;
+    currentY += (targetY - currentY) * EASE;
+    cursor.style.transform =
+      "translate3d(" + currentX + "px, " + currentY + "px, 0)";
+
+    // Keep animating until we're close enough to settle
+    if (Math.abs(targetX - currentX) > 0.1 || Math.abs(targetY - currentY) > 0.1) {
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+
+  function show(variant) {
+    cursor.setAttribute("data-variant", variant);
+    cursor.classList.add("is-visible");
+    if (rafId === null) rafId = requestAnimationFrame(tick);
+  }
+
+  function hide() {
+    cursor.classList.remove("is-visible");
+  }
+
+  function bind() {
+    targets.forEach(function (el) {
+      el.addEventListener("mouseenter", onEnter);
+      el.addEventListener("mouseleave", hide);
+    });
+    document.addEventListener("mousemove", onMove);
+  }
+
+  function unbind() {
+    targets.forEach(function (el) {
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mouseleave", hide);
+    });
+    document.removeEventListener("mousemove", onMove);
+    hide();
+  }
+
+  function onEnter(e) {
+    var variant = e.currentTarget.getAttribute("data-cursor");
+    if (variant) show(variant);
+  }
+
+  function sync(e) {
+    if (e.matches) bind();
+    else unbind();
+  }
+
+  if (mq.matches) bind();
+  if (mq.addEventListener) mq.addEventListener("change", sync);
+  else if (mq.addListener) mq.addListener(sync);
+})();
