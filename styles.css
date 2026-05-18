@@ -531,10 +531,9 @@ button { font: inherit; }
 
 .footer {
   margin-top: var(--gap-section);
-  padding: 24px 0;
+  padding: 24px 0 48px;
   display: flex;
   flex-direction: column;
-  gap: 150px;
   overflow: hidden;
 }
 
@@ -595,18 +594,6 @@ button { font: inherit; }
   transition: opacity 0.15s ease;
 }
 .footer__links a:hover { opacity: 0.7; }
-
-.footer__art {
-  margin: 0;
-  font-family: var(--ff-display);
-  font-size: clamp(96px, 30vw, 320px);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-  color: var(--text);
-  white-space: nowrap;
-  user-select: none;
-}
-
 
 /* =============================================
    BREAKPOINT 1: <1440 — content fluid (sidebar still visible)
@@ -676,7 +663,7 @@ button { font: inherit; }
   }
 
   .case__content { grid-template-columns: 1fr; }
-  .footer { gap: 56px; }
+  .footer { padding-bottom: 32px; }
   .hero__text p + p { margin-top: 16px; }
 
   .footer__top { flex-direction: column; gap: 32px; }
