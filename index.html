@@ -8,323 +8,282 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="page">
-  <aside class="sidebar" aria-label="Primary">
-    <a href="/" class="sidebar__logo" aria-label="Danil Egorov — home">Danil&#10;Egorov</a>
+  <span id="top" class="anchor" aria-hidden="true"></span>
 
-    <div class="sidebar__menu">
+  <aside class="sidebar" aria-label="Primary">
+    <a href="#top" class="sidebar__name" aria-label="Danil Egorov — top">Danil<br />Egorov</a>
+
+    <div class="sidebar__panel">
+      <img class="sidebar__asterisk" src="assets/images/figma/asterisk-nav.svg" alt="" aria-hidden="true" />
+
       <nav class="sidebar__nav" aria-label="Sections">
-        <a href="/" class="sidebar__nav-item sidebar__nav-item--active" aria-current="page">
-          <span>Projects</span>
-          <img class="sidebar__asterisk" src="assets/images/asterisk.svg" alt="" aria-hidden="true" />
-        </a>
-        <!-- Temporarily hidden until ready — restore when content is live
-        <a href="/experience.html" class="sidebar__nav-item">Experience</a>
-        <a href="/about.html" class="sidebar__nav-item">About me</a>
-        -->
-        <a href="#" class="sidebar__nav-item">Get CV</a>
-        <a href="mailto:dankick.work@gmail.com" class="sidebar__nav-item">Contacts</a>
+        <a href="#top" class="nav-link nav-link--active" aria-current="page">Projects</a>
+        <a href="#experience" class="nav-link nav-link--muted">Experience</a>
+        <a href="https://docs.google.com/document/d/1yU1yFTWTbjn8NHP4kgyr25iXZl1T16rhz5Ka0n6pvjY/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="nav-link nav-link--muted">Download CV</a>
+        <a href="mailto:dankick.work@gmail.com" class="nav-link nav-link--muted">Write to email</a>
       </nav>
 
-      <div class="sidebar__clock" aria-live="polite" aria-atomic="true">
-        <span class="clock__month">May</span><br />
-        <span class="clock__day">Sunday</span><br />
-        <span class="clock__time">00:00:00</span><br />
-        <span class="clock__tz">GMT +4</span>
-      </div>
+      <div class="sidebar__divider" aria-hidden="true"></div>
+
+      <nav class="sidebar__social" aria-label="Social">
+        <a href="https://www.linkedin.com/in/dank1ck/" target="_blank" rel="noopener noreferrer" class="social-link">LinkedIn</a>
+        <a href="https://t.me/Dankick" target="_blank" rel="noopener noreferrer" class="social-link">Telegram</a>
+        <a href="https://www.instagram.com/dank1ck/" target="_blank" rel="noopener noreferrer" class="social-link">Instagram</a>
+      </nav>
     </div>
   </aside>
 
-  <header class="mobile-header" aria-label="Mobile navigation">
-    <a href="/" class="mobile-header__logo">Danil Egorov</a>
-    <button class="mobile-header__menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
-      <svg class="mobile-header__plus" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+  <header class="mobile-header" aria-label="Mobile header">
+    <a href="#top" class="mobile-header__logo">Danil Egorov</a>
+    <button class="mobile-header__btn" type="button" aria-label="Open menu">
+      <img src="assets/images/figma/plus.svg" alt="" aria-hidden="true" />
     </button>
   </header>
 
-  <div class="menu" id="menu" aria-hidden="true">
-    <div class="menu__overlay"></div>
-    <div class="menu__panel">
-      <button class="menu__close" type="button" aria-label="Close menu">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M6 6L18 18M6 18L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-      <nav class="menu__nav" aria-label="Sections">
-        <a href="/" class="menu__nav-item menu__nav-item--active" aria-current="page">Projects</a>
-        <!-- Temporarily hidden until ready — restore when content is live
-        <a href="/experience.html" class="menu__nav-item">Experience</a>
-        <a href="/about.html" class="menu__nav-item">About me</a>
-        -->
-        <a href="#" class="menu__nav-item">Get CV</a>
-        <a href="mailto:dankick.work@gmail.com" class="menu__nav-item">Contacts</a>
-      </nav>
-      <div class="menu__clock" aria-live="polite" aria-atomic="true">
-        <span class="clock__month">May</span><br />
-        <span class="clock__day">Monday</span><br />
-        <span class="clock__time">00:00:00</span><br />
-        <span class="clock__tz">GMT +4</span>
-      </div>
-    </div>
-  </div>
-
   <main class="main">
     <!-- ============ HERO ============ -->
-    <section class="hero" aria-labelledby="hero-text">
-      <div class="hero__content">
-        <div class="hero__text" id="hero-text">
-          <p>I&rsquo;m a Product designer with 5 years of experience in fintech, e-commerce, and AI-driven startups</p>
-          <p>I launch products from 0 to 1, help scale them, and improve key product metrics</p>
-        </div>
-
-        <ul class="tags">
-          <li class="tag">Mobile Apps</li>
-          <li class="tag">Web Products</li>
-          <li class="tag">Design Systems</li>
-          <li class="tag">AI-tools &amp; Vibe Coding</li>
-          <li class="tag">UX Research</li>
-        </ul>
-      </div>
-
-      <div class="hero__media video-tile video-tile--hero">
-        <video class="video-tile__video" muted loop autoplay playsinline preload="auto">
-          <source src="assets/videos/Hero.webm" type="video/webm">
-          <source src="assets/videos/Hero.mp4" type="video/mp4">
+    <section class="hero" aria-label="Intro">
+      <p class="hero__text">I&rsquo;m a Product designer with 5 years of experience in fintech, e-commerce, and AI-driven startups. I launch products from 0 to 1, help scale them, and improve key product metrics</p>
+      <div class="hero__video">
+        <video class="hero__video-el" autoplay muted loop playsinline preload="metadata">
+          <source src="assets/videos/Hero.webm" type="video/webm" />
+          <source src="assets/videos/Hero.mp4" type="video/mp4" />
         </video>
       </div>
     </section>
 
-    <!-- ============ PRODUCT CASES ============ -->
-    <section class="cases" id="projects" aria-labelledby="cases-title">
-      <header class="cases__head">
-        <h2 class="cases__title" id="cases-title">Product cases</h2>
-      </header>
+    <!-- ============ BANXE ============ -->
+    <section class="case" aria-labelledby="case-banxe-title">
+      <h2 class="case__title" id="case-banxe-title">Banxe &mdash; how we designed a neobank mobile app in 4 weeks and received 4 Tagline Awards nominations</h2>
+      <ul class="tags">
+        <li class="tag">Mobile App</li>
+        <li class="tag">Fintech</li>
+        <li class="tag">Crypto Bank</li>
+      </ul>
 
-      <div class="cases__list">
-        <!-- CASE 1 — Banxe -->
-        <article class="case">
-          <a class="case__link" data-cursor="view" href="https://danilegorov.notion.site/Banxe-4-4-Tagline--357c35fc27d080b6a092ef1cdd6421b9?source=copy_link" target="_blank" rel="noopener noreferrer">
-            <div class="case__content">
-              <div class="case__col">
-                <div class="case__row">
-                  <span class="case__label">Project:</span>
-                  <h3 class="case__value">Banxe</h3>
-                </div>
-                <div class="case__row">
-                  <span class="case__label">Description:</span>
-                  <p class="case__desc">An international banking service that lets users manage, pay, and exchange fiat and cryptocurrencies in one place</p>
-                </div>
-              </div>
-              <div class="case__col">
-                <div class="case__row">
-                  <span class="case__label">My role</span>
-                  <p class="case__value">UX/UI Designer</p>
-                </div>
-                <div class="case__row">
-                  <span class="case__label">Tags</span>
-                  <ul class="tags">
-                    <li class="tag">Mobile App</li>
-                    <li class="tag">Fintech</li>
-                    <li class="tag">Crypto Bank</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+      <div class="strip strip--banxe is-desktop">
+        <img src="assets/images/figma/banxe-strip-1.png" alt="" />
+        <img src="assets/images/figma/banxe-strip-2.png" alt="" />
+        <img src="assets/images/figma/banxe-strip-3.png" alt="" />
+        <img src="assets/images/figma/banxe-strip-4.png" alt="" />
+      </div>
+      <div class="strip-mobile is-mobile">
+        <img src="assets/images/figma/banxe-mobile.png" alt="" />
+      </div>
 
-            <div class="case__media video-tile">
-              <img class="case__poster" src="assets/images/Banxe.jpg" alt="Banxe preview" />
-              <video class="case__video video-tile__video" muted playsinline preload="none">
-                <source data-src="assets/videos/Banxe.webm" type="video/webm">
-                <source data-src="assets/videos/Banxe.mp4" type="video/mp4">
-              </video>
-              <div class="case__awards" aria-label="Awards">
-                <img class="case__award" src="assets/images/Awward%201.svg" alt="Awwwards" />
-                <img class="case__award" src="assets/images/Awward%202.svg" alt="Awwwards" />
-              </div>
-            </div>
-          </a>
+      <div class="cards-block cards-block--banxe">
+        <img class="cards-block__el cards-block__el--phone" src="assets/images/figma/banxe-card-phone.png" alt="" />
+        <img class="cards-block__el cards-block__el--cards" src="assets/images/figma/banxe-card-cards.png" alt="" />
+        <img class="cards-block__el cards-block__el--tag" src="assets/images/figma/banxe-card-tag.png" alt="" />
+        <img class="cards-block__el cards-block__el--small" src="assets/images/figma/banxe-card-small.png" alt="" />
+        <img class="cards-block__el cards-block__el--asterisk is-desktop" src="assets/images/figma/banxe-asterisk.png" alt="" aria-hidden="true" />
+      </div>
+
+      <div class="results">
+        <article class="result-card result-card--award">
+          <img class="result-card__medal" src="assets/images/figma/award-silver.png" alt="Silver" />
+          <div class="result-card__text">
+            <h3 class="result-card__value">Silver</h3>
+            <p class="result-card__label">Best International Digital Service</p>
+          </div>
         </article>
-
-        <!-- CASE 2 — Wrobe -->
-        <article class="case">
-          <a class="case__link" data-cursor="view" href="https://danilegorov.notion.site/WROBE-from-MVP-to-first-50K-users-how-we-built-a-fashion-marketplace-with-a-virtual-try-on-356c35fc27d080aa8b02ffb032ceb74d" target="_blank" rel="noopener noreferrer">
-            <div class="case__content">
-              <div class="case__col">
-                <div class="case__row">
-                  <span class="case__label">Project title</span>
-                  <h3 class="case__value">Wrobe</h3>
-                </div>
-                <div class="case__row">
-                  <span class="case__label">Short description</span>
-                  <p class="case__desc">A fashion marketplace where users create avatars to try on and explore items from different brands</p>
-                </div>
-              </div>
-              <div class="case__col">
-                <div class="case__row">
-                  <span class="case__label">My role</span>
-                  <p class="case__value">Lead Product Designer</p>
-                </div>
-                <div class="case__row">
-                  <span class="case__label">Tags</span>
-                  <ul class="tags">
-                    <li class="tag">Mobile App</li>
-                    <li class="tag">Marketplace</li>
-                    <li class="tag">Fashion</li>
-                    <li class="tag">AI</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="case__media video-tile">
-              <img class="case__poster" src="assets/images/Wrobe.jpg" alt="Wrobe preview" />
-              <video class="case__video video-tile__video" muted playsinline preload="none">
-                <source data-src="assets/videos/Wrobe.webm" type="video/webm">
-                <source data-src="assets/videos/Wrobe.mp4" type="video/mp4">
-              </video>
-            </div>
-          </a>
+        <article class="result-card result-card--award">
+          <img class="result-card__medal" src="assets/images/figma/award-bronze.png" alt="Bronze" />
+          <div class="result-card__text">
+            <h3 class="result-card__value">Bronze</h3>
+            <p class="result-card__label">Best Mobile MVP App</p>
+          </div>
         </article>
+        <article class="result-card result-card--award">
+          <img class="result-card__medal" src="assets/images/figma/award-shortlist.png" alt="Shortlist" />
+          <div class="result-card__text">
+            <h3 class="result-card__value">Shortlist</h3>
+            <p class="result-card__label">Best Mobile Service</p>
+          </div>
+        </article>
+      </div>
 
-        <!-- CASE 3 — Effective security -->
-        <article class="case">
-          <div class="case__link case__link--soon" data-cursor="soon" role="group" aria-label="Effective security — coming soon">
-            <div class="case__content">
-              <div class="case__col">
-                <div class="case__row">
-                  <span class="case__label">Project title</span>
-                  <h3 class="case__value">Effective security</h3>
-                </div>
-                <div class="case__row">
-                  <span class="case__label">Short description</span>
-                  <p class="case__desc">An international banking service that lets users manage, pay, and exchange fiat and cryptocurrencies in one place</p>
-                </div>
-              </div>
-              <div class="case__col">
-                <div class="case__row">
-                  <span class="case__label">My role</span>
-                  <p class="case__value">UX/UI Designer</p>
-                </div>
-                <div class="case__row">
-                  <span class="case__label">Tags</span>
-                  <ul class="tags">
-                    <li class="tag">Cybersecurity</li>
-                    <li class="tag">B2B SaaS</li>
-                    <li class="tag">Web Product</li>
-                  </ul>
-                </div>
-              </div>
+      <a href="#" target="_blank" rel="noopener noreferrer" class="cta-button is-mobile">View case study</a>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ============ WROBE ============ -->
+    <section class="case" aria-labelledby="case-wrobe-title">
+      <h2 class="case__title" id="case-wrobe-title">WROBE &mdash; from MVP to first 50K users: how we built a fashion marketplace with a virtual try-on</h2>
+      <ul class="tags">
+        <li class="tag">Mobile App</li>
+        <li class="tag">E-commerce</li>
+        <li class="tag">Fashion</li>
+        <li class="tag">AI</li>
+      </ul>
+
+      <div class="strip strip--wrobe is-desktop">
+        <img src="assets/images/figma/wrobe-strip-2.png" alt="" />
+        <img src="assets/images/figma/wrobe-strip-1.png" alt="" />
+        <img src="assets/images/figma/wrobe-strip-3.png" alt="" />
+        <img src="assets/images/figma/wrobe-strip-4.png" alt="" />
+      </div>
+      <div class="strip-mobile is-mobile">
+        <img src="assets/images/figma/wrobe-mobile.png" alt="" />
+      </div>
+
+      <div class="results results--stats">
+        <article class="result-card">
+          <div class="result-card__text">
+            <h3 class="result-card__value">5x</h3>
+            <p class="result-card__label">30-day Retention</p>
+          </div>
+        </article>
+        <article class="result-card">
+          <div class="result-card__text">
+            <h3 class="result-card__value">4.7&times;</h3>
+            <p class="result-card__label">Items per session</p>
+          </div>
+        </article>
+        <article class="result-card result-card--wide-mobile">
+          <div class="result-card__text">
+            <h3 class="result-card__value">2.5&times;</h3>
+            <p class="result-card__label">Avatar creation funnel</p>
+          </div>
+        </article>
+      </div>
+
+      <a href="#" target="_blank" rel="noopener noreferrer" class="cta-button is-mobile">View case study</a>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ============ LOCUS ============ -->
+    <section class="case" aria-labelledby="case-locus-title">
+      <h2 class="case__title" id="case-locus-title">Locus &mdash; a blockchain-based investment platform</h2>
+      <ul class="tags">
+        <li class="tag">Investment Platform</li>
+        <li class="tag">Fintech</li>
+        <li class="tag">DeFi</li>
+      </ul>
+      <div class="hero-image">
+        <img src="assets/images/figma/locus.png" alt="Locus product screenshot" />
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ============ GALLERY ============ -->
+    <section class="case" aria-labelledby="case-gallery-title">
+      <h2 class="case__title" id="case-gallery-title">I&rsquo;m a co-founder of The Gallery Platform &mdash; a space where artists connect with curators, art managers, and art institutions for expert feedback and support</h2>
+      <div class="hero-image">
+        <img class="is-desktop" src="assets/images/figma/thegallery.png" alt="The Gallery Platform" />
+        <img class="is-mobile" src="assets/images/figma/thegallery-mobile.png" alt="The Gallery Platform" />
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ============ EXPERIENCE ============ -->
+    <section class="experience" id="experience" aria-labelledby="experience-title">
+      <h2 class="experience__title" id="experience-title">I have experience in product, studios and freelance</h2>
+
+      <div class="experience__rows">
+        <article class="exp-row">
+          <div class="exp-row__company">
+            <img class="exp-row__logo" src="assets/images/figma/wrobe-logo.svg" alt="Wrobe" />
+            <div class="exp-row__company-info">
+              <span class="exp-row__company-name">Wrobe</span>
+              <span class="exp-row__company-date">May 2023 - April 2026</span>
             </div>
-
-            <div class="case__media video-tile">
-              <img class="video-tile__image" src="assets/images/Effective%20security.png" alt="Effective security project" />
+          </div>
+          <div class="exp-row__role">
+            <div class="exp-row__role-text">
+              <h3 class="exp-row__role-title">Lead Product Designer</h3>
+              <p class="exp-row__role-desc">A fashion-tech startup building a virtual try-on marketplace, where I designed the iOS and Android app from MVP to launch, improved key product metrics, developed the design system, and created an internal admin tool.</p>
+            </div>
+            <div class="avatars">
+              <span class="avatars__item"><img src="assets/images/figma/wrobe-avatar-1.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/wrobe-avatar-2.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/wrobe-avatar-3.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/wrobe-avatar-4.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/wrobe-avatar-5.png" alt="" /></span>
+              <span class="avatars__more">+15</span>
             </div>
           </div>
         </article>
 
-        <!-- CASE 4 — Locus -->
-        <article class="case">
-          <div class="case__link case__link--soon" data-cursor="soon" role="group" aria-label="Locus — coming soon">
-            <div class="case__content">
-              <div class="case__col">
-                <div class="case__row">
-                  <span class="case__label">Project title</span>
-                  <h3 class="case__value">Locus</h3>
-                </div>
-                <div class="case__row">
-                  <span class="case__label">Short description</span>
-                  <p class="case__desc">A blockchain-based investment platform with automated vaults and ready-made strategies to generate returns</p>
-                </div>
-              </div>
-              <div class="case__col">
-                <div class="case__row">
-                  <span class="case__label">My role</span>
-                  <p class="case__value">UX/UI Designer</p>
-                </div>
-                <div class="case__row">
-                  <span class="case__label">Tags</span>
-                  <ul class="tags">
-                    <li class="tag">Investment Platform</li>
-                    <li class="tag">Blockchain</li>
-                    <li class="tag">DeFi</li>
-                  </ul>
-                </div>
-              </div>
+        <article class="exp-row">
+          <div class="exp-row__company">
+            <span class="exp-row__logo exp-row__logo--rounded"><img src="assets/images/figma/crauch-logo.png" alt="Crauch" /></span>
+            <div class="exp-row__company-info">
+              <span class="exp-row__company-name">Crauch</span>
+              <span class="exp-row__company-date">Sep 2022 - May 2023</span>
             </div>
+          </div>
+          <div class="exp-row__role">
+            <div class="exp-row__role-text">
+              <h3 class="exp-row__role-title">Middle UX/UI Designer</h3>
+              <p class="exp-row__role-desc">An award-winning product design studio helping startups and corporations launch and scale digital products, where I worked on MVPs across fintech, cybersecurity, edtech, and marketplace products</p>
+            </div>
+            <div class="avatars">
+              <span class="avatars__item"><img src="assets/images/figma/crauch-avatar-1.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/crauch-avatar-2.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/crauch-avatar-3.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/crauch-avatar-4.png" alt="" /></span>
+              <span class="avatars__item avatars__item--bordered"><img src="assets/images/figma/crauch-avatar-5.png" alt="" /></span>
+            </div>
+          </div>
+        </article>
 
-            <div class="case__media video-tile">
-              <img class="case__poster" src="assets/images/Locus.jpg" alt="Locus preview" />
-              <video class="case__video video-tile__video" muted playsinline preload="none">
-                <source data-src="assets/videos/Locus.webm" type="video/webm">
-                <source data-src="assets/videos/Locus.mp4" type="video/mp4">
-              </video>
+        <article class="exp-row">
+          <div class="exp-row__company">
+            <span class="exp-row__logo exp-row__logo--rounded exp-row__logo--zus"><img src="assets/images/figma/zus-logo.svg" alt="Zus Studio" /></span>
+            <div class="exp-row__company-info">
+              <span class="exp-row__company-name">Zus Studio</span>
+              <span class="exp-row__company-date">Nov 2020 - March 2022</span>
+            </div>
+          </div>
+          <div class="exp-row__role">
+            <div class="exp-row__role-text">
+              <h3 class="exp-row__role-title">Digital Designer</h3>
+              <p class="exp-row__role-desc">A design and development studio focused on branding, UX/UI, and web products for small and medium-sized businesses, where I designed websites, presentations, and visual assets across multiple industries</p>
+            </div>
+            <div class="avatars">
+              <span class="avatars__item"><img src="assets/images/figma/zus-avatar-1.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/zus-avatar-2.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/zus-avatar-3.png" alt="" /></span>
+              <span class="avatars__item"><img src="assets/images/figma/zus-avatar-4.png" alt="" /></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="exp-row">
+          <div class="exp-row__company">
+            <div class="exp-row__logos">
+              <span class="exp-row__logo exp-row__logo--rounded exp-row__logo--small"><img src="assets/images/figma/freelance-1.png" alt="" /></span>
+              <span class="exp-row__logo exp-row__logo--rounded exp-row__logo--small exp-row__logo--bordered"><img src="assets/images/figma/freelance-2.png" alt="" /></span>
+              <span class="exp-row__logo exp-row__logo--rounded exp-row__logo--small exp-row__logo--bordered"><img src="assets/images/figma/freelance-3.png" alt="" /></span>
+              <span class="exp-row__logo exp-row__logo--rounded exp-row__logo--small exp-row__logo--bordered"><img src="assets/images/figma/freelance-4.png" alt="" /></span>
+            </div>
+            <div class="exp-row__company-info">
+              <span class="exp-row__company-name">Freelance<br />&amp; Outsource</span>
+              <span class="exp-row__company-date">2022 &ndash; Present</span>
+            </div>
+          </div>
+          <div class="exp-row__role">
+            <div class="exp-row__role-text">
+              <h3 class="exp-row__role-title">UX/UI Designer</h3>
+              <p class="exp-row__role-desc">Worked on freelance crypto and Web3 projects, designing MVPs, UI concepts, promo materials, and Telegram mini apps.</p>
             </div>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- ============ FOOTER ============ -->
-    <footer class="footer" aria-labelledby="footer-cta">
-      <div class="footer__top">
-        <p class="footer__cta" id="footer-cta">
-          Available for full-time roles and freelance projects.<br />
-          Get in touch. Let&rsquo;s talk :)
-        </p>
+    <div class="divider divider--footer"></div>
 
-        <div class="footer__cols">
-          <div class="footer__col">
-            <p class="footer__label">Contacts</p>
-            <ul class="footer__links">
-              <li><a href="https://www.linkedin.com/in/dank1ck/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-              <li><a href="mailto:dankick.work@gmail.com">Email</a></li>
-              <li><a href="https://t.me/Dankick" target="_blank" rel="noopener noreferrer">Telegram</a></li>
-            </ul>
-          </div>
-
-          <div class="footer__col">
-            <p class="footer__label">Social Media</p>
-            <ul class="footer__links">
-              <li><a href="https://www.instagram.com/dank1ck/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-              <li><a href="https://www.facebook.com/dank1ck" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-              <li><a href="https://x.com/Dank1ck" target="_blank" rel="noopener noreferrer">Twitter (X)</a></li>
-            </ul>
-          </div>
-
-          <div class="footer__col">
-            <p class="footer__label">Inspiration</p>
-            <ul class="footer__links">
-              <li><a href="https://www.are.na/danil-egorov/channels" target="_blank" rel="noopener noreferrer">Are.na</a></li>
-              <li><a href="https://www.behance.net/Dankick" target="_blank" rel="noopener noreferrer">Behance</a></li>
-              <li><a href="https://dribbble.com/dankick" target="_blank" rel="noopener noreferrer">Dribbble</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+    <footer class="footer">
+      <p class="footer__copy">&copy; 2026, made with empathy and love</p>
     </footer>
   </main>
 
-  <!-- Custom hover cursor (desktop ≥1024 + hover-capable only) -->
-  <div class="hover-cursor" aria-hidden="true">
-    <div class="hover-cursor__inner">
-      <div class="hover-cursor__variant hover-cursor__variant--view">
-        <svg class="hover-cursor__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M5 5V13C5 14.6569 6.34315 16 8 16H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M15 12L19 16L15 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="hover-cursor__label">view case</span>
-      </div>
-      <div class="hover-cursor__variant hover-cursor__variant--soon">
-        <svg class="hover-cursor__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-          <path d="M12 7V12L15.5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="hover-cursor__label">coming soon</span>
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
