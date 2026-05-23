@@ -37,3 +37,21 @@
 
   observer.observe(experience);
 })();
+
+
+/* Banxe cards 3D float — animate only while in viewport.
+   Mobile + prefers-reduced-motion are disabled via CSS. */
+(function () {
+  "use strict";
+
+  var cards = document.querySelector(".cards-block--banxe");
+  if (!cards || !("IntersectionObserver" in window)) return;
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      cards.classList.toggle("is-animating", entry.isIntersecting);
+    });
+  }, { threshold: 0.1 });
+
+  observer.observe(cards);
+})();

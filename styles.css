@@ -559,9 +559,61 @@ button {
   width: var(--cards-w);
   aspect-ratio: 1024 / 566;
   margin-left: var(--cards-offset-x);
+  perspective: 1200px;
 }
 
-.cards-block__el { position: absolute; display: block; object-fit: cover; }
+.cards-block__el {
+  position: absolute;
+  display: block;
+  object-fit: cover;
+  transform-origin: center center;
+  will-change: transform;
+  animation-play-state: paused;
+}
+
+.cards-block.is-animating .cards-block__el--phone {
+  animation: card-float-1 7s ease-in-out infinite alternate;
+}
+.cards-block.is-animating .cards-block__el--cards {
+  animation: card-float-2 5.5s ease-in-out infinite alternate;
+  animation-delay: -1.2s;
+}
+.cards-block.is-animating .cards-block__el--tag {
+  animation: card-float-3 8s ease-in-out infinite alternate;
+  animation-delay: -2.4s;
+}
+.cards-block.is-animating .cards-block__el--small {
+  animation: card-float-4 6s ease-in-out infinite alternate;
+  animation-delay: -0.6s;
+}
+.cards-block.is-animating .cards-block__el--uni {
+  animation: card-float-2 6.5s ease-in-out infinite alternate;
+  animation-delay: -3s;
+}
+
+@keyframes card-float-1 {
+  from { transform: rotateX(-5deg) rotateY(-6deg) translateZ(-12px); }
+  to   { transform: rotateX(5deg)  rotateY(7deg)  translateZ(12px); }
+}
+@keyframes card-float-2 {
+  from { transform: rotateX(6deg)  rotateY(5deg)  translateY(-10px); }
+  to   { transform: rotateX(-6deg) rotateY(-5deg) translateY(10px); }
+}
+@keyframes card-float-3 {
+  from { transform: rotateX(-4deg) rotateY(8deg)  translateY(12px) translateZ(-8px); }
+  to   { transform: rotateX(4deg)  rotateY(-8deg) translateY(-12px) translateZ(8px); }
+}
+@keyframes card-float-4 {
+  from { transform: rotateX(7deg)  rotateY(-5deg) translateZ(10px); }
+  to   { transform: rotateX(-7deg) rotateY(6deg)  translateZ(-10px); }
+}
+
+@media (max-width: 1023.98px) {
+  .cards-block.is-animating .cards-block__el { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cards-block.is-animating .cards-block__el { animation: none; }
+}
 
 .cards-block__el--phone {
   left: 0;
@@ -587,12 +639,11 @@ button {
   width: 23.54%;
   height: 19.96%;
 }
-.cards-block__el--asterisk {
-  left: 76.46%;
-  top: 5.12%;
+.cards-block__el--uni {
+  left: 42.68%;
+  top: 3.18%;
   width: 17.68%;
   height: 29.15%;
-  object-fit: contain;
 }
 
 
