@@ -122,14 +122,14 @@
   --ls-chip: calc(-0.12 * var(--u));
 
   /* ---------- Spacing ---------- */
-  --gap-section: calc(100 * var(--u));
-  --gap-hero-text-video: calc(56 * var(--u));
+  --gap-section: calc(120 * var(--u));
+  --gap-hero-text-video: calc(40 * var(--u));
   --gap-title-tags: calc(24 * var(--u));
-  --gap-tags-media: calc(60 * var(--u));
-  --gap-media-block: calc(80 * var(--u));
+  --gap-tags-media: calc(44 * var(--u));
+  --gap-media-block: calc(40 * var(--u));
   --gap-block: calc(40 * var(--u));
-  --gap-exp-title: calc(96 * var(--u));
-  --gap-exp-rows: calc(96 * var(--u));
+  --gap-exp-title: calc(70 * var(--u));
+  --gap-exp-rows: calc(90 * var(--u));
   --gap-footer-top: calc(32 * var(--u));
 
   /* ---------- Component sizes ---------- */
@@ -301,6 +301,10 @@ button {
   top: var(--panel-pad);
   width: var(--panel-asterisk-size);
   height: auto;
+  transition: top 0.3s ease;
+}
+.sidebar__panel[data-active="experience"] .sidebar__asterisk {
+  top: calc(var(--panel-pad) + var(--lh-nav) + var(--panel-gap-nav));
 }
 
 .sidebar__nav {
@@ -478,6 +482,17 @@ button {
 }
 
 .case__title + .tags { margin-top: calc(var(--gap-title-tags) - var(--gap-block)); }
+
+.case__media {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-block);
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 1023.98px) {
+  .case__media { pointer-events: none; }
+}
 
 /* tags */
 
@@ -747,9 +762,24 @@ button {
 .exp-row__logo--small {
   display: inline-block;
   margin-left: calc(-1 * var(--logo-overlap));
+  background: #000;
 }
 .exp-row__logo--small:first-child { margin-left: 0; }
-.exp-row__logo--bordered { border: calc(2 * var(--u)) solid var(--bg); }
+.exp-row__logo--small img { background: #000; }
+.exp-row__logo--bordered {
+  width: 44px;
+  height: 44px;
+  border: 2px solid #000;
+  border-radius: 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.exp-row__logo--bordered img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
 .exp-row__company-info {
   display: flex;
@@ -836,6 +866,30 @@ button {
 .avatars__item:first-child { margin-left: 0; border: none; }
 
 .avatars__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.avatars__item--wrobe {
+  border-radius: 1000px;
+  border: 1px solid #000;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.avatars__item--wrobe img { object-fit: cover; }
+
+.avatars__item--crauch {
+  border-radius: 1000px;
+  border: 1px solid #000;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.avatars__item--crauch img { object-fit: cover; }
+
+.avatars__item--zus {
+  border-radius: 1000px;
+  border: 1px solid #000;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.avatars__item--zus img { object-fit: cover; }
 
 .avatars__more {
   display: inline-flex;
@@ -933,12 +987,12 @@ button {
     --ls-footer: calc(-0.12 * var(--u));
 
     /* Spacing tweaks for mobile */
-    --gap-section: calc(80 * var(--u));
+    --gap-section: calc(110 * var(--u));
     --gap-hero-text-video: calc(56 * var(--u));
     --gap-title-tags: calc(16 * var(--u));
     --gap-block: calc(24 * var(--u));
-    --gap-exp-title: calc(60 * var(--u));
-    --gap-exp-rows: calc(60 * var(--u));
+    --gap-exp-title: calc(80 * var(--u));
+    --gap-exp-rows: calc(80 * var(--u));
     --gap-footer-top: calc(20 * var(--u));
     --scroll-offset: calc(80 * var(--u));
 
