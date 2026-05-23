@@ -154,7 +154,7 @@
   --result-radius: calc(12 * var(--u));
   --result-pad: calc(19 * var(--u));
   --result-medal: calc(60 * var(--u));
-  --results-gap: calc(5 * var(--u));
+  --results-gap: calc(16 * var(--u));
 
   --cta-pad-x: calc(16 * var(--u));
   --cta-pad-y: calc(12 * var(--u));
@@ -243,6 +243,13 @@ a { color: inherit; text-decoration: none; }
 ul, ol { list-style: none; margin: 0; padding: 0; }
 
 h1, h2, h3, h4, p { margin: 0; }
+
+.hero__text,
+.case__title,
+.experience__title,
+.exp-row__role-desc {
+  text-wrap: pretty;
+}
 
 button {
   font: inherit;
@@ -1134,7 +1141,7 @@ button {
     --strip-h: auto;
 
     /* Results — single column awards, two-col stats */
-    --results-gap: calc(8 * var(--u));
+    --results-gap: calc(16 * var(--u));
 
     /* Result medal larger on mobile (60px stays) */
     --result-medal: calc(60 * var(--u));
