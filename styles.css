@@ -251,6 +251,15 @@ h1, h2, h3, h4, p { margin: 0; }
   text-wrap: pretty;
 }
 
+::selection {
+  background: #ff007a;
+  color: #fff;
+}
+::-moz-selection {
+  background: #ff007a;
+  color: #fff;
+}
+
 button {
   font: inherit;
   color: inherit;
