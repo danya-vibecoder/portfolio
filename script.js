@@ -3,37 +3,6 @@
    Mobile plus button is intentionally static (no menu logic). */
 
 
-/* Hard-block pinch/double-tap zoom on iOS Safari.
-   passive: false is required for preventDefault to take effect. */
-(function () {
-  "use strict";
-
-  ["gesturestart", "gesturechange", "gestureend"].forEach(function (evt) {
-    document.addEventListener(evt, function (e) { e.preventDefault(); }, { passive: false });
-  });
-
-  document.addEventListener("touchstart", function (e) {
-    if (e.touches.length > 1) e.preventDefault();
-  }, { passive: false });
-
-  document.addEventListener("touchmove", function (e) {
-    if (e.touches.length > 1) e.preventDefault();
-  }, { passive: false });
-
-  var lastTouchEnd = 0;
-  document.addEventListener("touchend", function (e) {
-    var now = Date.now();
-    if (now - lastTouchEnd <= 300) e.preventDefault();
-    lastTouchEnd = now;
-  }, { passive: false });
-
-  window.addEventListener("resize", function () {
-    if (window.visualViewport && window.visualViewport.scale !== 1) {
-      document.documentElement.style.zoom = 1;
-    }
-  });
-})();
-
 (function () {
   "use strict";
 
