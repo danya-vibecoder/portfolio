@@ -39,6 +39,80 @@
 })();
 
 
+/* Custom cursor follower — white dot trailing the native pointer.
+   Disabled on touch devices via CSS + JS guard. */
+(function () {
+  "use strict";
+
+  if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return;
+  if ("ontouchstart" in window && !window.matchMedia("(pointer: fine)").matches) return;
+
+  var cursor = document.querySelector(".cursor");
+  var label = cursor && cursor.querySelector(".cursor__label");
+  if (!cursor) return;
+
+  var tx = 0, ty = 0, cx = 0, cy = 0;
+  var primed = false;
+  var rafId = null;
+  var EASE = 0.18;
+
+  function tick() {
+    cx += (tx - cx) * EASE;
+    cy += (ty - cy) * EASE;
+    cursor.style.transform = "translate3d(" + cx + "px, " + cy + "px, 0)";
+    if (Math.abs(tx - cx) > 0.1 || Math.abs(ty - cy) > 0.1) {
+      rafId = requestAnimationFrame(tick);
+    } else {
+      rafId = null;
+    }
+  }
+
+  function onMove(e) {
+    tx = e.clientX;
+    ty = e.clientY;
+    if (!primed) {
+      cx = tx; cy = ty;
+      cursor.style.transform = "translate3d(" + cx + "px, " + cy + "px, 0)";
+      primed = true;
+      cursor.classList.add("is-shown");
+    }
+    if (rafId === null) rafId = requestAnimationFrame(tick);
+  }
+
+  function onEnter() { if (primed) cursor.classList.add("is-shown"); }
+  function onLeave() { cursor.classList.remove("is-shown"); }
+  function onDown() { cursor.classList.add("is-pressed"); }
+  function onUp() { cursor.classList.remove("is-pressed"); }
+
+  function onOver(e) {
+    var t = e.target;
+    var textEl = t.closest ? t.closest("[data-cursor-text]") : null;
+    if (textEl) {
+      cursor.classList.remove("is-hover-link");
+      cursor.classList.add("is-hover-text");
+      if (label) label.textContent = textEl.getAttribute("data-cursor-text");
+      return;
+    }
+    var linkEl = t.closest ? t.closest("a, button") : null;
+    if (linkEl) {
+      cursor.classList.remove("is-hover-text");
+      cursor.classList.add("is-hover-link");
+      if (label) label.textContent = "";
+      return;
+    }
+    cursor.classList.remove("is-hover-link", "is-hover-text");
+    if (label) label.textContent = "";
+  }
+
+  document.addEventListener("mousemove", onMove);
+  document.addEventListener("mouseover", onOver);
+  document.addEventListener("mousedown", onDown);
+  document.addEventListener("mouseup", onUp);
+  document.documentElement.addEventListener("mouseleave", onLeave);
+  document.documentElement.addEventListener("mouseenter", onEnter);
+})();
+
+
 /* Banxe cards 3D float — animate only while in viewport.
    Mobile + prefers-reduced-motion are disabled via CSS. */
 (function () {

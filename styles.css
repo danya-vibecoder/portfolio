@@ -247,6 +247,65 @@ button {
 
 .anchor { display: block; position: relative; top: 0; }
 
+
+/* =============================================
+   CUSTOM CURSOR FOLLOWER
+   ============================================= */
+
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  visibility: hidden;
+}
+
+.cursor.is-shown { visibility: visible; }
+
+.cursor__inner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  transition: width 280ms ease, height 280ms ease, transform 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor__label {
+  font-family: var(--ff-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: #000;
+  opacity: 0;
+  transition: opacity 180ms ease;
+  white-space: nowrap;
+  letter-spacing: -0.14px;
+}
+
+.cursor.is-hover-link .cursor__inner {
+  width: 44px;
+  height: 44px;
+}
+
+.cursor.is-hover-text .cursor__inner {
+  width: 80px;
+  height: 80px;
+}
+
+.cursor.is-hover-text .cursor__label { opacity: 1; }
+
+.cursor.is-pressed .cursor__inner { transform: translate(-50%, -50%) scale(0.85); }
+
+@media (pointer: coarse) {
+  .cursor { display: none; }
+}
+
 .is-mobile { display: none; }
 .is-desktop { display: block; }
 
@@ -1057,9 +1116,11 @@ button {
     --d-flex: none;
     --m-flex: flex;
 
-    /* Cards block — mobile geometry. Fit within mobile viewport. */
-    --cards-w: 100%;
-    --cards-offset-x: 0px;
+    /* Cards block — natural macet size (447×247), overflows viewport.
+       Macet has container at canvas left=-8; .case adds 16px padding-left,
+       so offset = -8 - 16 = -24 from .case content edge. */
+    --cards-w: calc(447 * var(--u));
+    --cards-offset-x: calc(-24 * var(--u));
 
     /* Strip height — let mobile image dictate height */
     --strip-h: auto;
@@ -1087,11 +1148,15 @@ button {
     margin-left: calc(-1 * var(--content-pad-x));
   }
 
-  /* Strip-mobile breaks out for full-bleed wide image */
+  /* Strip-mobile renders at macet-native size (552×271), overflowing viewport.
+     body { overflow-x: clip } hides the part outside viewport.
+     margin-left offsets per macet: -9 (banxe) / -152 (wrobe) from canvas left,
+     compensated for .case's 16px padding-left → -25 / -168. */
   .strip-mobile {
-    width: 100vw;
-    margin-left: calc(-1 * var(--content-pad-x));
+    width: calc(552 * var(--u));
   }
+  .strip-mobile--banxe { margin-left: calc(-25 * var(--u)); }
+  .strip-mobile--wrobe { margin-left: calc(-168 * var(--u)); }
 
   /* Strip desktop hidden */
   .strip { display: none; }
