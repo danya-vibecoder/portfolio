@@ -219,11 +219,7 @@ html { touch-action: pan-y; }
 
 html {
   background: var(--bg);
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  scroll-behavior: auto;
 }
 
 body.page {
