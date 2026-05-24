@@ -478,20 +478,31 @@ button {
   z-index: 110;
   padding: var(--mobile-header-pad-top) var(--mobile-header-pad-x);
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   pointer-events: none;
 }
 
 .mobile-header > * { pointer-events: auto; }
 
+/* Logo is a direct child of <body> so mix-blend-mode: difference can blend
+   against page content. Inside .mobile-header (position:fixed + z-index) it
+   would be trapped in that stacking context and only blend against the
+   transparent header. */
 .mobile-header__logo {
+  display: none;
+  position: fixed;
+  top: var(--mobile-header-pad-top);
+  left: var(--mobile-header-pad-x);
+  z-index: 120;
   font-family: var(--ff-display);
   font-weight: 400;
   font-size: var(--fs-name);
   line-height: 1;
   letter-spacing: var(--ls-name);
-  color: var(--text);
+  color: #fff;
+  mix-blend-mode: difference;
   white-space: nowrap;
+  pointer-events: auto;
 }
 
 .mobile-header__btn {
@@ -1352,6 +1363,7 @@ body.menu-closing .mobile-menu__link:nth-child(1) { transition-delay: 300ms; }
 
   .sidebar { display: none; }
   .mobile-header { display: flex; }
+  .mobile-header__logo { display: block; }
   .is-mobile { display: block; }
   .is-desktop { display: none; }
 
