@@ -40,10 +40,34 @@
 
   <header class="mobile-header" aria-label="Mobile header">
     <a href="#top" class="mobile-header__logo">Danil Egorov</a>
-    <button class="mobile-header__btn" type="button" aria-label="Open menu">
-      <img src="assets/images/figma/plus.svg" alt="" aria-hidden="true" />
+    <button class="mobile-header__btn" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span class="mobile-header__icon mobile-header__icon--plus" aria-hidden="true">
+        <img src="assets/images/figma/plus.svg" alt="" />
+      </span>
+      <span class="mobile-header__icon mobile-header__icon--cross" aria-hidden="true">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 2L14 14M14 2L2 14" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </span>
     </button>
   </header>
+
+  <div class="mobile-menu-backdrop" aria-hidden="true"></div>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <nav class="mobile-menu__nav" aria-label="Sections">
+      <a href="#top" class="mobile-menu__link mobile-menu__link--active">Projects</a>
+      <a href="#experience" class="mobile-menu__link mobile-menu__link--muted">Experience</a>
+      <a href="https://docs.google.com/document/d/1yU1yFTWTbjn8NHP4kgyr25iXZl1T16rhz5Ka0n6pvjY/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="mobile-menu__link mobile-menu__link--muted">Download CV</a>
+      <a href="mailto:dankick.work@gmail.com" class="mobile-menu__link mobile-menu__link--muted">Write to email</a>
+    </nav>
+    <div class="mobile-menu__divider" aria-hidden="true"></div>
+    <nav class="mobile-menu__social" aria-label="Social">
+      <a href="https://www.linkedin.com/in/dank1ck/" target="_blank" rel="noopener noreferrer" class="mobile-menu__social-link">LinkedIn</a>
+      <a href="https://t.me/Dankick" target="_blank" rel="noopener noreferrer" class="mobile-menu__social-link">Telegram</a>
+      <a href="https://www.instagram.com/dank1ck/" target="_blank" rel="noopener noreferrer" class="mobile-menu__social-link">Instagram</a>
+    </nav>
+  </div>
 
   <main class="main">
     <!-- ============ HERO ============ -->
@@ -183,7 +207,7 @@
 
     <!-- ============ EXPERIENCE ============ -->
     <section class="experience" id="experience" aria-labelledby="experience-title">
-      <h2 class="experience__title" id="experience-title">I&nbsp;have experience in&nbsp;product, studios and freelance</h2>
+      <h2 class="experience__title" id="experience-title">I&nbsp;have experience in&nbsp;product, studios&nbsp;and&nbsp;freelance</h2>
 
       <div class="experience__rows">
         <article class="exp-row">

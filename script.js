@@ -10,15 +10,29 @@
   var panel = document.querySelector(".sidebar__panel");
   var projectsLink = document.querySelector('.sidebar__nav a[href="#top"]');
   var experienceLink = document.querySelector('.sidebar__nav a[href="#experience"]');
-  if (!experience || !panel || !projectsLink || !experienceLink) return;
+  var mProjectsLink = document.querySelector('.mobile-menu a[href="#top"]');
+  var mExperienceLink = document.querySelector('.mobile-menu a[href="#experience"]');
+  if (!experience) return;
 
   function setActive(which) {
     var isExp = which === "experience";
-    experienceLink.classList.toggle("nav-link--active", isExp);
-    experienceLink.classList.toggle("nav-link--muted", !isExp);
-    projectsLink.classList.toggle("nav-link--active", !isExp);
-    projectsLink.classList.toggle("nav-link--muted", isExp);
-    panel.dataset.active = isExp ? "experience" : "projects";
+    if (experienceLink) {
+      experienceLink.classList.toggle("nav-link--active", isExp);
+      experienceLink.classList.toggle("nav-link--muted", !isExp);
+    }
+    if (projectsLink) {
+      projectsLink.classList.toggle("nav-link--active", !isExp);
+      projectsLink.classList.toggle("nav-link--muted", isExp);
+    }
+    if (panel) panel.dataset.active = isExp ? "experience" : "projects";
+    if (mExperienceLink) {
+      mExperienceLink.classList.toggle("mobile-menu__link--active", isExp);
+      mExperienceLink.classList.toggle("mobile-menu__link--muted", !isExp);
+    }
+    if (mProjectsLink) {
+      mProjectsLink.classList.toggle("mobile-menu__link--active", !isExp);
+      mProjectsLink.classList.toggle("mobile-menu__link--muted", isExp);
+    }
   }
 
   // Initial state — Projects active until observer says otherwise.
@@ -37,6 +51,101 @@
   }, { threshold: [0.3] });
 
   observer.observe(experience);
+})();
+
+
+/* Mobile menu — open/close + scroll lock + stagger animations. */
+(function () {
+  "use strict";
+
+  var body = document.body;
+  var btn = document.querySelector(".mobile-header__btn");
+  var menu = document.getElementById("mobile-menu");
+  var backdrop = document.querySelector(".mobile-menu-backdrop");
+  if (!btn || !menu) return;
+
+  var savedScrollY = 0;
+  var isAnimating = false;
+
+  function lockScroll() {
+    savedScrollY = window.scrollY || window.pageYOffset || 0;
+    body.style.position = "fixed";
+    body.style.top = "-" + savedScrollY + "px";
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+  }
+
+  function unlockScroll() {
+    body.style.position = "";
+    body.style.top = "";
+    body.style.left = "";
+    body.style.right = "";
+    body.style.width = "";
+    window.scrollTo(0, savedScrollY);
+  }
+
+  function openMenu() {
+    if (isAnimating || body.classList.contains("menu-open")) return;
+    isAnimating = true;
+    lockScroll();
+    body.classList.remove("menu-closing");
+    body.classList.add("menu-open");
+    btn.setAttribute("aria-expanded", "true");
+    menu.setAttribute("aria-hidden", "false");
+    setTimeout(function () { isAnimating = false; }, 800);
+  }
+
+  function closeMenu() {
+    if (isAnimating || !body.classList.contains("menu-open")) return;
+    isAnimating = true;
+    body.classList.add("menu-closing");
+    body.classList.remove("menu-open");
+    btn.setAttribute("aria-expanded", "false");
+    menu.setAttribute("aria-hidden", "true");
+
+    setTimeout(function () {
+      body.classList.remove("menu-closing");
+      unlockScroll();
+      isAnimating = false;
+    }, 800);
+  }
+
+  btn.addEventListener("click", function () {
+    if (body.classList.contains("menu-open")) closeMenu();
+    else openMenu();
+  });
+
+  if (backdrop) backdrop.addEventListener("click", closeMenu);
+
+  menu.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      if (!body.classList.contains("menu-open")) return;
+      var href = a.getAttribute("href");
+      var isAnchor = href && href.charAt(0) === "#";
+
+      if (isAnchor) {
+        // Scroll lock prevents native anchor navigation while body is fixed.
+        // Cancel the default jump, close the menu, then smooth-scroll once unlocked.
+        e.preventDefault();
+        closeMenu();
+        setTimeout(function () {
+          if (href === "#top" || href === "#") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } else {
+            var t = document.querySelector(href);
+            if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 820);
+      } else {
+        closeMenu();
+      }
+    });
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && body.classList.contains("menu-open")) closeMenu();
+  });
 })();
 
 
