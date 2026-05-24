@@ -125,18 +125,23 @@
       var isAnchor = href && href.charAt(0) === "#";
 
       if (isAnchor) {
-        // Scroll lock prevents native anchor navigation while body is fixed.
-        // Cancel the default jump, close the menu, then smooth-scroll once unlocked.
+        // Scroll lock makes body fixed at top: -savedScrollY. If we leave
+        // savedScrollY pointing at the spot the user was at when the menu
+        // opened, unlockScroll snaps back there before the anchor scroll
+        // can run. Override savedScrollY with the target position so the
+        // unlock lands exactly where the user wanted to go.
         e.preventDefault();
-        closeMenu();
-        setTimeout(function () {
-          if (href === "#top" || href === "#") {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          } else {
-            var t = document.querySelector(href);
-            if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+        var targetY = 0;
+        if (href !== "#top" && href !== "#") {
+          var t = document.querySelector(href);
+          if (t) {
+            // getBoundingClientRect is relative to the fixed viewport (top: -savedScrollY).
+            // Add savedScrollY back to recover the document-absolute Y.
+            targetY = Math.max(0, t.getBoundingClientRect().top + savedScrollY);
           }
-        }, 820);
+        }
+        savedScrollY = targetY;
+        closeMenu();
       } else {
         closeMenu();
       }

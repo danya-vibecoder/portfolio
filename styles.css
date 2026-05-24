@@ -1377,5 +1377,12 @@ body.menu-closing .mobile-menu__link:nth-child(1) { transition-delay: 300ms; }
   .exp-row__role-desc { max-width: none; }
   .exp-row__role-text { gap: calc(8 * var(--u)); }
 
+  /* Single company logos (Wrobe/Crauch/Zus) shrink to 40px on mobile.
+     Freelance stack (.exp-row__logo--small) keeps its 44px from --bordered. */
+  .exp-row__logo:not(.exp-row__logo--small) {
+    width: calc(40 * var(--u));
+    height: calc(40 * var(--u));
+  }
+
   /* Mobile content padding via .main padding rule */
 }
