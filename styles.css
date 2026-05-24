@@ -251,6 +251,38 @@ h1, h2, h3, h4, p { margin: 0; }
   text-wrap: pretty;
 }
 
+
+/* =============================================
+   SCROLL-REVEAL — per-word stagger on headlines
+   ============================================= */
+
+.reveal .word {
+  display: inline-block;
+  filter: blur(10px);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: filter 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 70ms);
+  will-change: filter, opacity, transform;
+}
+
+.reveal.is-revealed .word {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .word {
+    filter: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 ::selection {
   background: #ff007a;
   color: #fff;

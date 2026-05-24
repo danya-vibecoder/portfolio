@@ -228,6 +228,61 @@
 })();
 
 
+/* Scroll-reveal — split target headlines into words, stagger blur→sharp
+   on viewport entry. Fires once per element. */
+(function () {
+  "use strict";
+
+  var headings = document.querySelectorAll(
+    ".hero__text, .case__title, .experience__title"
+  );
+  if (!headings.length) return;
+
+  var prefersReducedMotion =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Split each heading into <span class="word">; preserve runs of non-regular-space
+  // characters so `&nbsp;`-glued pairs (e.g. "how we") stay one span.
+  headings.forEach(function (el) {
+    var text = el.textContent;
+    var parts = text.match(/[^ ]+|[ ]+/g) || [];
+    el.textContent = "";
+    el.classList.add("reveal");
+
+    var wordIndex = 0;
+    parts.forEach(function (part) {
+      if (part.charAt(0) === " ") {
+        el.appendChild(document.createTextNode(part));
+      } else {
+        var span = document.createElement("span");
+        span.className = "word";
+        span.style.setProperty("--i", wordIndex);
+        span.textContent = part;
+        el.appendChild(span);
+        wordIndex++;
+      }
+    });
+  });
+
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    headings.forEach(function (el) { el.classList.add("is-revealed"); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-revealed");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  headings.forEach(function (el) { observer.observe(el); });
+})();
+
+
 /* Banxe cards 3D float — animate only while in viewport.
    Mobile + prefers-reduced-motion are disabled via CSS. */
 (function () {
