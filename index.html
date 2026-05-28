@@ -15,6 +15,12 @@
   <script type="module" src="web-analytics.js"></script>
 </head>
 <body class="page">
+  <div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Loading">
+    <div class="preloader__counter">
+      <span class="preloader__num" id="preloader-num">0</span><span class="preloader__pct">%</span>
+    </div>
+  </div>
+
   <span id="top" class="anchor" aria-hidden="true"></span>
 
   <aside class="sidebar" aria-label="Primary">

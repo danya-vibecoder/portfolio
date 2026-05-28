@@ -3,6 +3,80 @@
    Mobile plus button is intentionally static (no menu logic). */
 
 
+/* Preloader — fixed-duration counter (0→100) with blur reveal on the digits,
+   curtain slides up on complete. Independent of asset loading so the timing
+   stays predictable on slow connections. Other IIFEs that animate above
+   the fold wait for the `preloader:done` event. */
+(function () {
+  "use strict";
+
+  var preloader = document.getElementById("preloader");
+  var numEl = document.getElementById("preloader-num");
+  if (!preloader || !numEl) {
+    document.documentElement.classList.remove("preloader-active");
+    document.dispatchEvent(new Event("preloader:done"));
+    return;
+  }
+
+  var body = document.body;
+  var html = document.documentElement;
+  var prefersReducedMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  html.classList.add("preloader-active");
+  var prevHtmlOverflow = html.style.overflow;
+  var prevBodyOverflow = body.style.overflow;
+  html.style.overflow = "hidden";
+  body.style.overflow = "hidden";
+
+  // Kick off the blur-in of the counter after one frame so the transition
+  // actually plays (rather than being applied before the initial paint).
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () { preloader.classList.add("is-ready"); });
+  });
+
+  var DURATION = 2000;
+  var start = null;
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function done() {
+    document.dispatchEvent(new Event("preloader:done"));
+
+    if (prefersReducedMotion) {
+      preloader.classList.add("is-leaving");
+      setTimeout(cleanup, 320);
+      return;
+    }
+
+    preloader.classList.add("is-leaving");
+    setTimeout(cleanup, 780);
+  }
+
+  function cleanup() {
+    html.classList.remove("preloader-active");
+    html.style.overflow = prevHtmlOverflow;
+    body.style.overflow = prevBodyOverflow;
+    if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+  }
+
+  function step(ts) {
+    if (start === null) start = ts;
+    var t = Math.min(1, (ts - start) / DURATION);
+    var val = Math.floor(easeOutCubic(t) * 100);
+    numEl.textContent = val;
+    if (t < 1) {
+      requestAnimationFrame(step);
+    } else {
+      numEl.textContent = "100";
+      done();
+    }
+  }
+
+  requestAnimationFrame(step);
+})();
+
+
 (function () {
   "use strict";
 
@@ -270,16 +344,26 @@
     return;
   }
 
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-revealed");
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
+  function startObserver() {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
 
-  headings.forEach(function (el) { observer.observe(el); });
+    headings.forEach(function (el) { observer.observe(el); });
+  }
+
+  // Wait for the preloader to leave before observing, otherwise the hero
+  // headline's reveal would play behind the black curtain.
+  if (document.documentElement.classList.contains("preloader-active")) {
+    document.addEventListener("preloader:done", startObserver, { once: true });
+  } else {
+    startObserver();
+  }
 })();
 
 
@@ -300,22 +384,31 @@
   observer.observe(cards);
 })();
 
-/* Lenis smooth scroll — desktop only. */
+/* Lenis smooth scroll — desktop only. Deferred until the preloader leaves
+   so its body-overflow lock doesn't interfere with Lenis's scroll proxy. */
 (function() {
   "use strict";
 
   if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return;
 
-  const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-    wheelMultiplier: 1,
-  });
+  function initLenis() {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+    });
 
-  function raf(time) {
-    lenis.raf(time);
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
     requestAnimationFrame(raf);
   }
-  requestAnimationFrame(raf);
+
+  if (document.documentElement.classList.contains("preloader-active")) {
+    document.addEventListener("preloader:done", initLenis, { once: true });
+  } else {
+    initLenis();
+  }
 })();
